@@ -11,13 +11,13 @@ This is a docker galaxy tools, and thus, the docker needs to be built locally wh
 ### Build the tool
 
 ```
-docker build --no-cache -t sbc/selenzy .
+docker build --no-cache -t brsynth/selenzyme .
 ```
 
 And then run the container (use tmux or -deamon):
 
 ```
-docker run --network host -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' sbc/selenzy
+docker run --network host -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' brsynth/selenzyme
 ```
 
 ### Prerequisites
