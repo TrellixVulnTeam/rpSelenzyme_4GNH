@@ -11,7 +11,7 @@ This is a docker galaxy tools, and thus, the docker needs to be built locally wh
 ### Build the tool
 
 ```
-docker build --no-cache -t sbc/selenzy .
+docker build --no-cache -t brsynth/selenzy .
 ```
 
 And then run the container (use tmux or -deamon):
