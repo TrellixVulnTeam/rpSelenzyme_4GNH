@@ -27,6 +27,7 @@ RUN git clone -b Flask https://github.com/pablocarb/selenzy.git
 COPY data.tar.xz selenzy/
 RUN tar xf selenzy/data.tar.xz -C selenzy/
 RUN sed -i "s/app\.config\['KEEPDAYS'\] = 10/app\.config\['KEEPDAYS'\] = 0\.125 #three hours/g" selenzy/flaskform.py
+RUN mkdir selenzy/log
 
 # To be replaced by a git clone
 #RUN wget http://130.88.113.226/selenzy/selenzy.tar.gz
