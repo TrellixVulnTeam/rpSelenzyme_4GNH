@@ -17,9 +17,9 @@ RUN conda install -c biobuilds t-coffee
 # can use a single Dockerfile instead of the above
 #FROM sbc/selenzybase 
 
-RUN apt-get --quiet update && \
-        apt-get --quiet --yes dist-upgrade && \
-        apt-get --quiet --yes install git
+#RUN apt-get --quiet update && \
+#        apt-get --quiet --yes dist-upgrade && \
+#        apt-get --quiet --yes install git
 
 #RUN pip install biopython
 
