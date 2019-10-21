@@ -8,7 +8,7 @@ NOTE: temporarely I added selenzyme inside the rpSelenzyme docker image (sort of
 
 This is a docker galaxy tools, and thus, the docker needs to be built locally where Galaxy is installed. 
 
-### Build the tool
+### Build and run the service
 
 ```
 docker build --no-cache -t brsynth/selenzyme .
