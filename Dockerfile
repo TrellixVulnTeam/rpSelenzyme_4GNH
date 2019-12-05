@@ -11,6 +11,8 @@ FROM continuumio/anaconda3:4.4.0
 # Install rdkit
 RUN conda install -c conda-forge flask-restful
 RUN conda install -c rdkit rdkit
+# To avoid error: "SystemError: initialization of rdmolops raised unreported exception"
+RUN conda install numpy=1.13
 RUN conda install -c anaconda biopython
 RUN conda install -c bioconda emboss
 RUN conda install -c biobuilds t-coffee
