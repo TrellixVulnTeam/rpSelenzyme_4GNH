@@ -11,13 +11,13 @@ This is a docker galaxy tools, and thus, the docker needs to be built locally wh
 ### Build and run the service
 
 ```
-docker build --no-cache -t brsynth/selenzyme .
+docker build -t brsynth/selenzyme .
 ```
 
 And then run the container (use tmux or -deamon):
 
 ```
-docker run --network host -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' brsynth/selenzyme
+docker run -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' brsynth/selenzyme
 ```
 
 ### Prerequisites
@@ -40,12 +40,6 @@ Make sure that docker can be run in root:
 sudo groupadd docker
 sudo gpasswd -a $USER docker
 sudo service docker restart
-```
-
-Build the docker image:
-
-```
-docker build -t ibisba/rpselenzyme .
 ```
 
 Make sure that the following job_conf.xml looks like this:
