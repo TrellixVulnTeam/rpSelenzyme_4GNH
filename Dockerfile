@@ -17,6 +17,8 @@ RUN conda install -c anaconda biopython
 RUN conda install -c bioconda emboss
 RUN conda install -c biobuilds t-coffee
 
+RUN cd / && git clone -b Flask https://github.com/pablocarb/selenzy.git
+
 ENTRYPOINT ["python"]
 
 #CMD ["/selenzyPro/flaskform.py", "-uploaddir", "/selenzyPro/uploads", "-datadir", "/selenzyPro/data", "-logdir", "/selenzyPro/log" ]
