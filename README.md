@@ -17,7 +17,7 @@ docker build --no-cache -t brsynth/selenzyme .
 And then run the container (use tmux or -deamon):
 
 ```
-docker run --network host -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' brsynth/selenzyme
+docker run -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' brsynth/selenzyme
 ```
 
 ### Prerequisites
