@@ -132,8 +132,6 @@ if __name__ == "__main__":
     parser.add_argument('-server_url', type=str)
     parser.add_argument('-pathway_id', type=str)
     params = parser.parse_args()
-
-    params = parser.parse_args()
     #Slower method that takes up more HDD
     processRun(params.inputTar, params.outputTar, params.server_url, params.pathway_id)
     exit(0)

@@ -21,6 +21,7 @@ COPY data.tar.xz /home/selenzy/
 RUN tar xf selenzy/data.tar.xz -C /home/selenzy/
 RUN rm /home/selenzy/data.tar.xz
 RUN sed -i "s/app\.config\['KEEPDAYS'\] = 10/app\.config\['KEEPDAYS'\] = 0\.125 #three hours/g" /home/selenzy/flaskform.py
+RUN sed -i "s/maintenance(app\.config\['KEEPDAYS'\])/maintenance(-1)/g" /home/selenzy/flaskform.py
 RUN mkdir /home/selenzy/log
 RUN mkdir /home/selenzy/uploads
 
