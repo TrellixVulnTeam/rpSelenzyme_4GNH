@@ -11,7 +11,7 @@ This is a docker galaxy tools, and thus, the docker needs to be built locally wh
 ### Build and run the service
 
 ```
-docker build -t brsynth/selenzyme .
+docker build -t brsynth/selenzyme-rest .
 ```
 
 And then run the container (use tmux or -deamon):

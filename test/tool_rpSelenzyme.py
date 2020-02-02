@@ -5,15 +5,14 @@ import sys #exit using sys exit if any error is encountered
 import os
 import requests
 import json
+import tempfile
+import glob
+import shutil
 
 from io import BytesIO
 import tarfile
 
 import libsbml
-
-#sys.path.insert(0, '/home/')
-#import rpRanker
-
 
 
 ## given a reaction SMILES query Selenzyme for the Uniprot ID's and its associated score
@@ -102,7 +101,6 @@ def parseReactionSBML(model, url, pathId='rp_pathway'):
             bag_miriam.addChild(q.getChild('Description').getChild('is').getChild('Bag').getChild('li'))
 
 
-
 ##
 #
 #
@@ -121,17 +119,36 @@ def processRun(inputTar, outTar, url, pathId):
                     tf.addfile(tarinfo=info, fileobj=fiOut)
 
 
+#TODO: write the _hdd version of the process
 
 ##
 #
 #
 if __name__ == "__main__":
     parser = argparse.ArgumentParser('Given an SBML, extract the reaction rules and pass them to Selenzyme REST service and write the results to the SBML')
-    parser.add_argument('-inputTar', type=str)
-    parser.add_argument('-outputTar', type=str)
-    parser.add_argument('-server_url', type=str)
-    parser.add_argument('-pathway_id', type=str)
+    parser.add_argument('-input', type=str)
+    parser.add_argument('-output', type=str)
+    parser.add_argument('-input_format', type=str)
+    parser.add_argument('-url', type=str)
+    parser.add_argument('-pathId', type=str)
     params = parser.parse_args()
-    #Slower method that takes up more HDD
-    processRun(params.inputTar, params.outputTar, params.server_url, params.pathway_id)
-    exit(0)
+    if params.input_format=='tar':
+        processRun(params.input, params.output, params.url, params.pathId)
+    elif params.input_format=='sbml':
+        #make the tar.xz 
+        with tempfile.TemporaryDirectory() as tmpOutputFolder:
+            inputTar = tmpOutputFolder+'/tmp_input.tar.xz'
+            outputTar = tmpOutputFolder+'/tmp_output.tar.xz'
+            with tarfile.open(inputTar, mode='w:xz') as tf:
+                info = tarfile.TarInfo('single.rpsbml.xml') #need to change the name since galaxy creates .dat files
+                info.size = os.path.getsize(params.input)
+                tf.addfile(tarinfo=info, fileobj=open(params.input, 'rb'))
+            processRun(inputTar, outputTar, params.url, params.pathId)
+            with tarfile.open(outputTar) as outTar:
+                outTar.extractall(tmpOutputFolder)
+            out_file = glob.glob(tmpOutputFolder+'/*.rpsbml.xml')
+            if len(out_file)>1:
+                logging.warning('There are more than one output file...')
+            shutil.copy(out_file[0], params.output)
+    else:
+        logging.error('Cannot identify the input/output format: '+str(params.input_format))
