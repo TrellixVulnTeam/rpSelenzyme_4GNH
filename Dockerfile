@@ -3,9 +3,6 @@
 # rename this file to "Dockerfile"
 # build with: "sudo docker build -t selenzy ."
 
-#
-#
-#FROM continuumio/anaconda3
 FROM continuumio/anaconda3:4.4.0
 
 # Install rdkit
