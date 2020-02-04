@@ -20,6 +20,7 @@ RUN conda install -y -c biobuilds t-coffee
 RUN cd /home \
  && git clone -b Flask https://github.com/pablocarb/selenzy.git \
  && sed -i "s/app\.config\['KEEPDAYS'\] = 10/app\.config\['KEEPDAYS'\] = 0\.125 \#three hours/g" selenzy/flaskform.py \
+ && sed -i "s/maintenance(app\.config\['KEEPDAYS'\])/maintenance(-1)/g" selenzy/flaskform.py \
  && mkdir selenzy/log selenzy/uploads
 
 ENTRYPOINT ["python"]
