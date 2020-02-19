@@ -1,21 +1,21 @@
 # rpSelenzyme
 
-Tool that takes for input a tar.xz with a collection of rpSBML or single rpSBML and scans for the reaction rules, makes a REST request to a selenzyme database and adds the results to the BRSynth annotations of rpSBML's. 
+Tool that takes for input a tar.xz with a collection of rpSBML or single rpSBML, scans for the reaction rules and makes a REST request to [Selenzyme](Selenzyme.synbiochem.co.uk) and finds the enzymatic sequences (through Uniprot ID's) of all the reactions in heterologous pathways of rpSBML files.
 
 ## Information Flow
 
 ### Input
 
 Required information:
-    * Either a single rpSBML or collection pacakged in a tar.xz
+* **Unput rpSBML**: Either a single rpSBML or collection pacakged in a tar.xz
 
 Advanced options:
-    * Name of the heterologous pathway: (default: rp_pathway) Groups ID of the heterologous pathway
-    * IP address of the rpSelenzyme REST service: IP address of the REST service
+* **Name of the heterologous pathway**: (default: rp_pathway) Groups ID of the heterologous pathway
+* **IP address of the rpSelenzyme REST service**: IP address of the REST service
 
 ### Output
 
-* rpSelenzyme: Either single rpSBML or collection of rpSBML's in a tar.xz
+* **rpSelenzyme**: Either single rpSBML or collection of rpSBML's in a tar.xz
 
 ## Installing 
 
