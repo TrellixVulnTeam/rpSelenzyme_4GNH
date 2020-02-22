@@ -22,7 +22,7 @@ Advanced options:
 To compile the docker run the following command:
 
 ```
-docker build -t brsynth/selenzyme-rest:dev .
+docker build -t brsynth/selenzyme-standalone .
 ```
 
 And then run the container (use tmux or -deamon):
