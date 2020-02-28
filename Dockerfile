@@ -28,6 +28,7 @@ RUN tar xf selenzy/data.tar.xz -C /home/selenzy/
 #ENTRYPOINT ["conda", "run", "-n", "conda_selenzyme", "python", "rpToolServe.py"]
 
 COPY rpToolServe.py /home/
+COPY rpTool.py /home/
 
 ENTRYPOINT ["conda", "run", "-n", "conda_selenzyme", "python"]
 CMD ["/home/rpToolServe.py"]
