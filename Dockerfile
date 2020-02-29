@@ -21,15 +21,5 @@ RUN tar xf selenzy/data.tar.xz -C /home/selenzy/
 #RUN mkdir selenzy/log
 #RUN mkdir selenzy/uploads
 
-#ENTRYPOINT ["python"]
-#CMD ["/home/selenzy/flaskform.py", "-uploaddir", "/home/selenzy/uploads", "-datadir", "/home/selenzy/data", "-logdir", "/home/selenzy/log" ]
-#EXPOSE 5000
-###################################################
-#ENTRYPOINT ["conda", "run", "-n", "conda_selenzyme", "python", "rpToolServe.py"]
-
 COPY rpToolServe.py /home/
 COPY rpTool.py /home/
-
-ENTRYPOINT ["conda", "run", "-n", "conda_selenzyme", "python"]
-CMD ["/home/rpToolServe.py"]
-EXPOSE 8888

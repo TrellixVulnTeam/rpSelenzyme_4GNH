@@ -10,9 +10,6 @@ Created on September 21 2019
 import os
 import json
 import libsbml
-from datetime import datetime
-from flask import Flask, request, jsonify, send_file, abort
-from flask_restful import Resource, Api
 import io
 import tarfile
 import csv
@@ -23,33 +20,6 @@ import tempfile
 sys.path.insert(0, '/home/')
 import rpSBML
 import rpTool
-
-#######################################################
-############## REST ###################################
-#######################################################
-
-app = Flask(__name__)
-api = Api(app)
-
-def stamp(data, status=1):
-    appinfo = {'app': 'rpSelenzyme', 'version': '0.1',
-               'author': 'Pablo Carbonel, Melchior du Lac',
-               'organization': 'BRS',
-               'time': datetime.now().isoformat(),
-               'status': status}
-    out = appinfo.copy()
-    out['data'] = data
-    return out
-
-
-## REST App.
-#
-#
-class RestApp(Resource):
-    def post(self):
-        return jsonify(stamp(None))
-    def get(self):
-        return jsonify(stamp(None))
 
 
 ##
@@ -108,32 +78,3 @@ def runSelenzyme_hdd(inputTar,
                     info = tarfile.TarInfo(fileName)
                     info.size = os.path.getsize(sbml_path)
                     ot.addfile(tarinfo=info, fileobj=open(sbml_path, 'rb'))
-
-
-## REST Query
-#
-# REST interface that generates the Design.
-# Avoid returning numpy or pandas object in
-# order to keep the client lighter.
-class RestQuery(Resource):
-    def post(self):
-        inputTar = request.files['inputTar']
-        params = json.load(request.files['data'])
-        #pass the cache parameters to the rpSelenzyme object
-        outputTar = io.BytesIO()
-        ######## HDD #######
-        runSelenzyme_hdd(inputTar, outputTar, params['pathway_id'], params['host_taxonomy_id'], params['num_targets'])
-        ######## MEM #######
-        #runSelenzyme_mem(inputTar, outputTar, params['pathway_id'], params['host_taxonomy'], params['num_targets'])
-        ###### IMPORTANT ######
-        outputTar.seek(0)
-        #######################
-        return send_file(outputTar, as_attachment=True, attachment_filename='rpSelenzyme.tar', mimetype='application/x-tar')
-
-
-api.add_resource(RestApp, '/REST')
-api.add_resource(RestQuery, '/REST/Query')
-
-
-if __name__== "__main__":
-    app.run(host="0.0.0.0", port=8888, debug=True, threaded=True)
