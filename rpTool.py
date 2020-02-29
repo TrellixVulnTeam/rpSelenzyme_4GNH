@@ -8,6 +8,8 @@ Created on September 21 2019
 """
 
 import logging
+import tempfile
+import json
 import sys
 sys.path.insert(0, '/home/selenzy/')
 import Selenzy
@@ -47,21 +49,19 @@ def singleSBML(rpsbml,
                noMSA=True,
                fp='RDK',
                rxntype='smarts'):
-    try:
-        for reac_id in rpsbml.readRPpathwayIDs(pathway_id):
-            reac = rpsbml.model.getReaction(reac_id)
-            brs_reac = rpsbml.readBRSYNTHAnnotation(reac.getAnnotation())
-            if brs_reac['smiles']:
+    for reac_id in rpsbml.readRPpathwayIDs(pathway_id):
+        reac = rpsbml.model.getReaction(reac_id)
+        brs_reac = rpsbml.readBRSYNTHAnnotation(reac.getAnnotation())
+        if brs_reac['smiles']:
+            try:
                 uniprotID_score = singleReactionRule(brs_reac['smiles'], host_taxonomy_id, num_targets, direction, noMSA, fp, rxntype)
                 xref = {'uniprot': [i for i in uniprotID_score]}
                 rpsbml.addUpdateMIRIAM(reac, 'reaction', xref)
-                return rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score, None, False, True, True)
-            else:
-                logging.warning('Cannot retreive the reaction rule of model '+str(rpsbml.model.getId()))
-                return False
-    except ValueError:
-        logging.warning('Problem with retreiving the selenzyme information for model '+str(rpsbml.model.getId()))
-        return False
+                rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score, None, False, True, True)
+            except ValueError:
+                logging.warning('Problem with retreiving the selenzyme information for model '+str(rpsbml.model.getId()))
+        else:
+            logging.warning('Cannot retreive the reaction rule of model '+str(rpsbml.model.getId()))
 
 
 
