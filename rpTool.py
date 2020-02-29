@@ -63,6 +63,7 @@ def singleSBML(rpsbml,
     except ValueError:
         logging.warning('Problem with retreiving the selenzyme information for model '+str(rpsbml.model.getId()))
         return False
+    return True
 
 
 
