@@ -55,10 +55,9 @@ def singleSBML(rpsbml,
                 uniprotID_score = singleReactionRule(brs_reac['smiles'], host_taxonomy_id, num_targets, direction, noMSA, fp, rxntype)
                 xref = {'uniprot': [i for i in uniprotID_score]}
                 rpsbml.addUpdateMIRIAM(reac, 'reaction', xref)
-                return rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score, None, False, True, True)
+                rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score, None, False, True, True)
             else:
                 logging.warning('Cannot retreive the reaction rule of model '+str(rpsbml.model.getId()))
-                return False
     except ValueError:
         logging.warning('Problem with retreiving the selenzyme information for model '+str(rpsbml.model.getId()))
         return False
