@@ -23,3 +23,4 @@ RUN tar xf selenzy/data.tar.xz -C /home/selenzy/
 
 COPY rpToolServe.py /home/
 COPY rpTool.py /home/
+COPY tool_rpSelenzyme.py /home/
