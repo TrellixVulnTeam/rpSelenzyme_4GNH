@@ -60,8 +60,11 @@ def singleSBML(rpsbml,
                 rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score, None, False, True, True)
             except ValueError:
                 logging.warning('Problem with retreiving the selenzyme information for model '+str(rpsbml.model.getId()))
+                return False
         else:
             logging.warning('Cannot retreive the reaction rule of model '+str(rpsbml.model.getId()))
+            return False
+    return True
 
 
 

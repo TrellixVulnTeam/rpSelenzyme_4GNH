@@ -1,25 +1,18 @@
 FROM brsynth/rpbase:dev
 
-COPY environment_selenzyme.yml .
-RUN conda env create -f environment_selenzyme.yml
-#ENV PATH /usr/local/envs/conda_selenzyme/bin:$PATH
-#ENV CONDA_DEFAULT_ENV conda_selenzyme 
-#RUN /bin/bash -c "source activate conda_selenzyme"
-#SHELL ["conda", "run", "-n", "conda_selenzyme", "/bin/bash", "-c"]
-RUN echo "source activate $(head -1 /home/environment_selenzyme.yml | cut -d' ' -f2)" > ~/.bashrc
-ENV PATH /usr/local/envs/$(head -1 /home/environment_selenzyme.yml | cut -d' ' -f2)/bin:$PATH
+RUN conda install -c rdkit rdkit
+RUN conda install -c conda-forge flask-restful
+RUN conda install -c anaconda biopython
+RUN conda install -c bioconda emboss
+RUN conda install -c biobuilds t-coffee
 
 RUN apt-get install -y libxrender1 libsm6 libxext6
-
-RUN git clone -b Flask https://github.com/pablocarb/selenzy.git
+#WARNING: we are copying a py37 compatible version of selenzyme -- need to update this if there are selenzyme updates
+#add the allow_pickle=True to the np.load( command
+COPY selenzy /home/
 COPY data.tar.xz /home/selenzy/
 RUN tar xf selenzy/data.tar.xz -C /home/selenzy/
-
-##### If using Pablo's Flask service ############## 
-#RUN sed -i "s/app\.config\['KEEPDAYS'\] = 10/app\.config\['KEEPDAYS'\] = 0\.125 \#three hours/g" /home/selenzy/flaskform.py
-#RUN sed -i "s/maintenance(app\.config\['KEEPDAYS'\])/maintenance(-1)/g" selenzy/flaskform.py
-#RUN mkdir selenzy/log
-#RUN mkdir selenzy/uploads
+RUN rm /home/selenzy/data.tar.xz
 
 COPY rpToolServe.py /home/
 COPY rpTool.py /home/

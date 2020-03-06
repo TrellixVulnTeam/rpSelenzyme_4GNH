@@ -42,11 +42,11 @@ if __name__ == "__main__":
         logging.warning('Taxonomy Input format not recognised')
     ####### input #######
     if params.input_format=='tar':
-		rpToolServe.runSelenzyme_hdd(params.input,
-									 params.output,
-									 params.pathway_id,
-									 tax_id,
-									 params.num_targets)
+        rpToolServe.runSelenzyme_hdd(params.input,
+                                     params.output,
+                                     params.pathway_id,
+                                     tax_id,
+                                     params.num_results)
     elif params.input_format=='sbml':
         #make the tar.xz 
         with tempfile.TemporaryDirectory() as tmpOutputFolder:
@@ -56,11 +56,11 @@ if __name__ == "__main__":
                 info = tarfile.TarInfo('single.rpsbml.xml') #need to change the name since galaxy creates .dat files
                 info.size = os.path.getsize(params.input)
                 tf.addfile(tarinfo=info, fileobj=open(params.input, 'rb'))
-			rpToolServe.runSelenzyme_hdd(input_tar,
-										 output_tar,
-										 params.pathway_id,
-										 tax_id,
-										 params.num_targets)
+            rpToolServe.runSelenzyme_hdd(input_tar,
+                                         output_tar,
+                                         params.pathway_id,
+                                         tax_id,
+                                         params.num_results)
             with tarfile.open(output_tar) as outTar:
                 outTar.extractall(tmpOutputFolder)
             out_file = glob.glob(tmpOutputFolder+'/*.rpsbml.xml')

@@ -38,7 +38,8 @@ def main(inputfile,
             exit(1)
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
         shutil.copy(inputfile, tmpOutputFolder+'/input.dat')
-        command = ['/home/tool_rpExtractSink.py',
+        #command = #['/usr/local/envs/conda_selenzyme/bin/python',
+        command = ['/home/tool_rpSelenzyme.py',
                    '-input',
                    '/home/tmp_output/input.dat',
                    '-output',
@@ -58,7 +59,7 @@ def main(inputfile,
                 auto_remove=True, 
                 detach=False, 
                 volumes={tmpOutputFolder+'/': {'bind': '/home/tmp_output', 'mode': 'rw'}})
-        shutil.copy(tmpOutputFolder+'/output.dat', os.getcwd()+'/'+output_sink)
+        shutil.copy(tmpOutputFolder+'/output.dat', output)
 
 
 ##
