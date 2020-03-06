@@ -62,7 +62,7 @@ def runSelenzyme_hdd(inputTar,
                      rxntype='smarts'):
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
         with tempfile.TemporaryDirectory() as tmpInputFolder:
-            tar = tarfile.open(fileobj=inputTar, mode='r:xz')
+            tar = tarfile.open(inputTar, mode='r:xz')
             tar.extractall(path=tmpInputFolder)
             tar.close()
             for sbml_path in glob.glob(tmpInputFolder+'/*'):
@@ -72,7 +72,7 @@ def runSelenzyme_hdd(inputTar,
                 if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_targets, direction, noMSA, fp, rxntype):
                     rpsbml.writeSBML(tmpOutputFolder)
                 rpsbml = None
-            with tarfile.open(fileobj=outputTar, mode='w:xz') as ot:
+            with tarfile.open(outputTar, mode='w:xz') as ot:
                 for sbml_path in glob.glob(tmpOutputFolder+'/*'):
                     fileName = str(sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', ''))+'.rpsbml.xml'
                     info = tarfile.TarInfo(fileName)
