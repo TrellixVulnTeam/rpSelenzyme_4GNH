@@ -1,7 +1,6 @@
 FROM brsynth/rpbase:dev
 
 RUN conda install -c rdkit rdkit
-RUN conda install -c conda-forge flask-restful
 RUN conda install -c anaconda biopython
 RUN conda install -c bioconda emboss
 RUN conda install -c biobuilds t-coffee
