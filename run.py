@@ -23,7 +23,8 @@ def main(inputfile,
          taxonomy_input,
          taxonomy_format,
          pathway_id,
-         output):
+         output,
+         min_aa_length):
     docker_client = docker.from_env()
     image_str = 'brsynth/rpselenzyme-standalone:dev'
     try:
@@ -53,7 +54,9 @@ def main(inputfile,
                    '-taxonomy_format',
                    str(taxonomy_format),
                    '-taxonomy_input',
-                   str(taxonomy_input)]
+                   str(taxonomy_input),
+                   '-min_aa_length',
+                   str(min_aa_length)]
         docker_client.containers.run(image_str, 
                 command, 
                 auto_remove=True, 
@@ -74,6 +77,7 @@ if __name__ == "__main__":
     parser.add_argument('-num_results', type=int, default=10)
     parser.add_argument('-taxonomy_format', type=str)
     parser.add_argument('-taxonomy_input', type=str)
+    parser.add_argument('-min_aa_length', type=int)
     params = parser.parse_args()
     main(params.input, 
          params.input_format,
@@ -81,4 +85,5 @@ if __name__ == "__main__":
          params.taxonomy_input,
          params.taxonomy_format,
          params.pathway_id,
-         params.output)
+         params.output,
+         params.min_aa_length)

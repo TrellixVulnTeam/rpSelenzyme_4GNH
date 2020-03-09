@@ -47,7 +47,7 @@ TODO
 To test the execution of the tool, untar the test.tar.xz and execute the following command:
 
 ```
-python run.py -input test/test_rpThermo.tar -input_format tar -taxonomy_format string -taxonomy_input 83333 -output test/test_rpSelenzyme.tar
+python run.py -input test/test_rpThermo.tar -input_format tar -taxonomy_format string -taxonomy_input 83333 -min_aa_length 100 -output test/test_rpSelenzyme.tar
 ```
 
 ## Versioning
