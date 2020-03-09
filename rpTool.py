@@ -34,7 +34,7 @@ with open(DATADIR+'sel_len.csv') as csv_file:
 
 def singleReactionRule(reaction_smile,
                        host_taxonomy_id,
-                       num_targets=50,
+                       num_results=50,
                        direction=0,
                        noMSA=True,
                        fp='RDK',
@@ -42,7 +42,7 @@ def singleReactionRule(reaction_smile,
     uniprotID_score = {}
     score = Selenzy.seqScore()
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
-        success, results = Selenzy.analyse(['-'+rxntype, reaction_smile], num_targets, DATADIR, tmpOutputFolder, 'tmp.csv', 0, host_taxonomy_id, pc=pc, NoMSA=noMSA)
+        success, results = Selenzy.analyse(['-'+rxntype, reaction_smile], num_results, DATADIR, tmpOutputFolder, 'tmp.csv', 0, host_taxonomy_id, pc=pc, NoMSA=noMSA)
         data = Selenzy.updateScore(tmpOutputFolder+'/tmp.csv', score)
         val = json.loads(data.to_json())
         if 'Seq. ID' in val and len(val['Seq. ID'])>0:
@@ -56,7 +56,7 @@ def singleReactionRule(reaction_smile,
 def singleSBML(rpsbml,
                host_taxonomy_id=83333,
                pathway_id='rp_pathway',
-               num_targets=50,
+               num_results=50,
                direction=0,
                noMSA=True,
                fp='RDK',
@@ -67,7 +67,7 @@ def singleSBML(rpsbml,
         brs_reac = rpsbml.readBRSYNTHAnnotation(reac.getAnnotation())
         if brs_reac['smiles']:
             try:
-                uniprotID_score = singleReactionRule(brs_reac['smiles'], host_taxonomy_id, num_targets, direction, noMSA, fp, rxntype)
+                uniprotID_score = singleReactionRule(brs_reac['smiles'], host_taxonomy_id, num_results, direction, noMSA, fp, rxntype)
                 uniprotID_score_restricted = {}
                 for uniprot in uniprotID_score:
                     if uniprotID_score[uniprot]>int(min_aa_length):
