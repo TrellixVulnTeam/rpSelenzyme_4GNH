@@ -29,7 +29,7 @@ def runSelenzyme_mem(inputTar,
                      outputTar,
                      pathway_id='rp_pathway',
                      host_taxonomy_id=83333,
-                     num_targets=50,
+                     num_results=50,
                      direction=0,
                      noMSA=True,
                      fp='RDK',
@@ -41,7 +41,7 @@ def runSelenzyme_mem(inputTar,
             for member in in_tf.getmembers():
                 if not member.name=='':
                     rpsbml = rpSBML.rpSBML(member.name, libsbml.readSBMLFromString(in_tf.extractfile(member).read().decode("utf-8")))
-                    if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_targets, direction, noMSA, fp, rxntype, min_aa_length):
+                    if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
                         sbml_bytes = libsbml.writeSBMLToString(rpsbml.document).encode('utf-8')
                         fiOut = io.BytesIO(sbml_bytes)
                         info = tarfile.TarInfo(fileName+'.rpsbml.xml')
@@ -56,7 +56,7 @@ def runSelenzyme_hdd(inputTar,
                      outputTar,
                      pathway_id='rp_pathway',
                      host_taxonomy_id=83333,
-                     num_targets=50,
+                     num_results=50,
                      direction=0,
                      noMSA=True,
                      fp='RDK',
@@ -71,7 +71,7 @@ def runSelenzyme_hdd(inputTar,
                 fileName = sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', '')
                 rpsbml = rpSBML.rpSBML(fileName)
                 rpsbml.readSBML(sbml_path)
-                if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_targets, direction, noMSA, fp, rxntype, min_aa_length):
+                if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
                     rpsbml.writeSBML(tmpOutputFolder)
                 rpsbml = None
             with tarfile.open(outputTar, mode='w:xz') as ot:
