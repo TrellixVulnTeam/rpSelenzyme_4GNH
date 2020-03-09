@@ -28,7 +28,7 @@ def main(inputfile,
          noMSA,
          fp,
          rxntype,
-         min_aa_length)
+         min_aa_length):
     docker_client = docker.from_env()
     image_str = 'brsynth/rpselenzyme-standalone:dev'
     try:
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     parser.add_argument('-input', type=str)
     parser.add_argument('-output', type=str)
     parser.add_argument('-input_format', type=str)
-    parser.add_argument('-pathway_id', type=str)
+    parser.add_argument('-pathway_id', type=str, default='rp_pathway')
     parser.add_argument('-num_results', type=int, default=10)
     parser.add_argument('-taxonomy_format', type=str)
     parser.add_argument('-taxonomy_input', type=str)
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     parser.add_argument('-noMSA', type=bool, default=True)
     parser.add_argument('-fp', type=str, default='RDK')
     parser.add_argument('-rxntype', type=str, default='smarts')
-    parser.add_argument('-min_aa_length' type=int, default=100)
+    parser.add_argument('-min_aa_length', type=int, default=100)
     params = parser.parse_args()
     main(params.input,
          params.output,
