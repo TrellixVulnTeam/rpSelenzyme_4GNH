@@ -25,10 +25,14 @@ if __name__ == "__main__":
     parser.add_argument('-output', type=str)
     parser.add_argument('-input_format', type=str)
     parser.add_argument('-pathway_id', type=str)
-    parser.add_argument('-num_results', type=int)
+    parser.add_argument('-num_results', type=int, default=10)
     parser.add_argument('-taxonomy_format', type=str)
     parser.add_argument('-taxonomy_input', type=str)
-    parser.add_argument('-min_aa_length', type=int)
+    parser.add_argument('-direction', type=int, default=0)
+    parser.add_argument('-noMSA', type=bool, default=True)
+    parser.add_argument('-fp', type=str, default='RDK')
+    parser.add_argument('-rxntype', type=str, default='smarts')
+    parser.add_argument('-min_aa_length' type=int, default=100)
     params = parser.parse_args()
     tax_id = -1
     ##### taxonomy #######
@@ -41,6 +45,12 @@ if __name__ == "__main__":
         tax_id = int(params.taxonomy_input)
     else:
         logging.warning('Taxonomy Input format not recognised')
+    ####### MSA #########
+    noMSA = True
+    if params.noMSA=='True' or params.noMSA=='true' or params.noMSA=='T' or params.noMSA==True:
+        noMSA = True
+    elif params.noMSA=='False' or params.noMSA=='false' or params.noMSA=='F' or params.noMSA==False:
+        noMSA = False
     ####### input #######
     if params.input_format=='tar':
         rpToolServe.runSelenzyme_hdd(params.input,
@@ -48,6 +58,10 @@ if __name__ == "__main__":
                                      params.pathway_id,
                                      tax_id,
                                      params.num_results,
+                                     params.direction,
+                                     noMSA,
+                                     params.fp,
+                                     params.rxntype,
                                      params.min_aa_length)
     elif params.input_format=='sbml':
         #make the tar.xz 
@@ -63,6 +77,10 @@ if __name__ == "__main__":
                                          params.pathway_id,
                                          tax_id,
                                          params.num_results,
+                                         params.direction,
+                                         noMSA,
+                                         params.fp,
+                                         params.rxntype,
                                          params.min_aa_length)
             with tarfile.open(output_tar) as outTar:
                 outTar.extractall(tmpOutputFolder)
