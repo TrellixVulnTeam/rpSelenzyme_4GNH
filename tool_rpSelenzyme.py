@@ -28,6 +28,7 @@ if __name__ == "__main__":
     parser.add_argument('-num_results', type=int)
     parser.add_argument('-taxonomy_format', type=str)
     parser.add_argument('-taxonomy_input', type=str)
+    parser.add_argument('-min_aa_length', type=int)
     params = parser.parse_args()
     tax_id = -1
     ##### taxonomy #######
@@ -46,7 +47,8 @@ if __name__ == "__main__":
                                      params.output,
                                      params.pathway_id,
                                      tax_id,
-                                     params.num_results)
+                                     params.num_results,
+                                     params.min_aa_length)
     elif params.input_format=='sbml':
         #make the tar.xz 
         with tempfile.TemporaryDirectory() as tmpOutputFolder:
@@ -60,7 +62,8 @@ if __name__ == "__main__":
                                          output_tar,
                                          params.pathway_id,
                                          tax_id,
-                                         params.num_results)
+                                         params.num_results,
+                                         params.min_aa_length)
             with tarfile.open(output_tar) as outTar:
                 outTar.extractall(tmpOutputFolder)
             out_file = glob.glob(tmpOutputFolder+'/*.rpsbml.xml')

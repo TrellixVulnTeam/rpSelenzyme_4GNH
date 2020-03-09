@@ -11,12 +11,24 @@ import logging
 import tempfile
 import json
 import sys
+import csv
 sys.path.insert(0, '/home/selenzy/')
 import Selenzy
 
 ## global parameter 
 DATADIR = '/home/selenzy/data/'
 pc = Selenzy.readData(DATADIR)
+
+############## Cache ##############
+
+uniprot_aaLenght = {}
+with open(DATADIR+'sel_len.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    next(csv_reader)
+    for row in csv_reader:
+        uniprot_aaLenght[row[0].split('|')[1]] = row[1]
+
+############## Tools ##############
 
 #Empty to follow the rp tools writting convention
 
@@ -48,16 +60,26 @@ def singleSBML(rpsbml,
                direction=0,
                noMSA=True,
                fp='RDK',
-               rxntype='smarts'):
+               rxntype='smarts',
+               min_aa_length=100):
     for reac_id in rpsbml.readRPpathwayIDs(pathway_id):
         reac = rpsbml.model.getReaction(reac_id)
         brs_reac = rpsbml.readBRSYNTHAnnotation(reac.getAnnotation())
         if brs_reac['smiles']:
             try:
                 uniprotID_score = singleReactionRule(brs_reac['smiles'], host_taxonomy_id, num_targets, direction, noMSA, fp, rxntype)
+                uniprotID_score_restricted = {}
+                for uniprot in uniprotID_score:
+                    if uniprotID_score[uniprot]>int(min_aa_length):
+                        uniprotID_score_restricted[uniprot] = uniprotID_score[uniprot]
+                '''
                 xref = {'uniprot': [i for i in uniprotID_score]}
                 rpsbml.addUpdateMIRIAM(reac, 'reaction', xref)
                 rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score, None, False, True, True)
+                '''
+                xref = {'uniprot': [i for i in uniprotID_score_restricted]}
+                rpsbml.addUpdateMIRIAM(reac, 'reaction', xref)
+                rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score_restricted, None, False, True, True)
             except ValueError:
                 logging.warning('Problem with retreiving the selenzyme information for model '+str(rpsbml.model.getId()))
                 return False
