@@ -55,22 +55,23 @@ class RestApp(Resource):
 ##
 #
 #
-def runSelenzyme_mem(inputTar, 
-                     outputTar, 
-                     pathway_id='rp_pathway', 
-                     host_taxonomy_id=83333, 
-                     num_targets=50, 
-                     direction=0, 
-                     noMSA=True, 
-                     fp='RDK', 
-                     rxntype='smarts'):
+def runSelenzyme_mem(inputTar,
+                     outputTar,
+                     pathway_id='rp_pathway',
+                     host_taxonomy_id=83333,
+                     num_results=50,
+                     direction=0,
+                     noMSA=True,
+                     fp='RDK',
+                     rxntype='smarts',
+                     min_aa_length=100):
     #loop through all of them and run FBA on them
     with tarfile.open(fileobj=outputTar, mode='w:xz') as tf:
         with tarfile.open(fileobj=inputTar, mode='r:xz') as in_tf:
             for member in in_tf.getmembers():
                 if not member.name=='':
                     rpsbml = rpSBML.rpSBML(member.name, libsbml.readSBMLFromString(in_tf.extractfile(member).read().decode("utf-8")))
-                    if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_targets, direction, noMSA, fp, rxntype):
+                    if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
                         sbml_bytes = libsbml.writeSBMLToString(rpsbml.document).encode('utf-8')
                         fiOut = io.BytesIO(sbml_bytes)
                         info = tarfile.TarInfo(fileName+'.rpsbml.xml')
@@ -81,15 +82,16 @@ def runSelenzyme_mem(inputTar,
 ## run using HDD 3X less than the above function
 #
 #
-def runSelenzyme_hdd(inputTar, 
-                     outputTar, 
-                     pathway_id='rp_pathway', 
-                     host_taxonomy_id=83333, 
-                     num_targets=50, 
-                     direction=0, 
-                     noMSA=True, 
-                     fp='RDK', 
-                     rxntype='smarts'):
+def runSelenzyme_hdd(inputTar,
+                     outputTar,
+                     pathway_id='rp_pathway',
+                     host_taxonomy_id=83333,
+                     num_results=50,
+                     direction=0,
+                     noMSA=True,
+                     fp='RDK',
+                     rxntype='smarts',
+                     min_aa_length=100):
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
         with tempfile.TemporaryDirectory() as tmpInputFolder:
             tar = tarfile.open(fileobj=inputTar, mode='r:xz')
@@ -99,7 +101,7 @@ def runSelenzyme_hdd(inputTar,
                 fileName = sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', '')
                 rpsbml = rpSBML.rpSBML(fileName)
                 rpsbml.readSBML(sbml_path)
-                if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_targets, direction, noMSA, fp, rxntype):
+                if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
                     rpsbml.writeSBML(tmpOutputFolder)
                 rpsbml = None
             with tarfile.open(fileobj=outputTar, mode='w:xz') as ot:
@@ -122,9 +124,18 @@ class RestQuery(Resource):
         #pass the cache parameters to the rpSelenzyme object
         outputTar = io.BytesIO()
         ######## HDD #######
-        runSelenzyme_hdd(inputTar, outputTar, params['pathway_id'], params['host_taxonomy_id'], params['num_targets'])
+        runSelenzyme_hdd(inputTar,
+                         outputTar,
+                         params['pathway_id'],
+                         params['host_taxonomy_id'],
+                         params['num_results'],
+                         params['direction'],
+                         params['noMSA'],
+                         params['fp'],
+                         params['rxntype'],
+                         params['min_aa_length'])
         ######## MEM #######
-        #runSelenzyme_mem(inputTar, outputTar, params['pathway_id'], params['host_taxonomy'], params['num_targets'])
+        #runSelenzyme_mem(inputTar, outputTar, params['pathway_id'], params['host_taxonomy'], params['num_results'])
         ###### IMPORTANT ######
         outputTar.seek(0)
         #######################
