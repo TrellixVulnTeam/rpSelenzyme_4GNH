@@ -26,7 +26,7 @@ with open(DATADIR+'sel_len.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     next(csv_reader)
     for row in csv_reader:
-        uniprot_aaLenght[row[0].split('|')[1]] = row[1]
+        uniprot_aaLenght[row[0].split('|')[1]] = int(row[1])
 
 ############## Tools ##############
 
@@ -63,20 +63,26 @@ def singleSBML(rpsbml,
                rxntype='smarts',
                min_aa_length=100):
     for reac_id in rpsbml.readRPpathwayIDs(pathway_id):
+        print(reac_id)
         reac = rpsbml.model.getReaction(reac_id)
         brs_reac = rpsbml.readBRSYNTHAnnotation(reac.getAnnotation())
         if brs_reac['smiles']:
             try:
                 uniprotID_score = singleReactionRule(brs_reac['smiles'], host_taxonomy_id, num_results, direction, noMSA, fp, rxntype)
+                print(uniprotID_score)
                 uniprotID_score_restricted = {}
                 for uniprot in uniprotID_score:
-                    if uniprotID_score[uniprot]>int(min_aa_length):
-                        uniprotID_score_restricted[uniprot] = uniprotID_score[uniprot]
+                    try:
+                        if uniprot_aaLenght[uniprot]>int(min_aa_length):
+                            uniprotID_score_restricted[uniprot] = uniprotID_score[uniprot]
+                    except KeyError:
+                        logging.warning('Cannot find the following UNIPROT '+str(uniprot)+' in uniprot_aaLenght')
                 '''
                 xref = {'uniprot': [i for i in uniprotID_score]}
                 rpsbml.addUpdateMIRIAM(reac, 'reaction', xref)
                 rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score, None, False, True, True)
                 '''
+                print(uniprotID_score_restricted)
                 xref = {'uniprot': [i for i in uniprotID_score_restricted]}
                 rpsbml.addUpdateMIRIAM(reac, 'reaction', xref)
                 rpsbml.addUpdateBRSynth(reac, 'selenzyme', uniprotID_score_restricted, None, False, True, True)

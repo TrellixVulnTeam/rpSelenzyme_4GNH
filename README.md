@@ -1,21 +1,29 @@
 # rpSelenzyme
 
+* Docker Image: [brsynth/rpselenzyme-standalone](https://hub.docker.com/r/brsynth/rpselenzyme-standalone)
+
 Tool that takes for input a tar.xz with a collection of rpSBML or single rpSBML, scans for the reaction rules and makes a REST request to [Selenzyme](Selenzyme.synbiochem.co.uk) and finds the enzymatic sequences (through Uniprot ID's) of all the reactions in heterologous pathways of rpSBML files.
 
-## Information Flow
+## Input
 
-### Input
+Required:
+* **-input**: (string) Path to the input file
+* **-input_format**: (string) Valid options: sbml, tar. Format of the input file
+* **-taxonomy_input**: (integer) Host taxomonomy ID of the organism the enzymes will be expressed in
+* **-taxonomy_format**: (string) Valid options: json, integer. Format of the taxonomy input
 
-Required information:
-* **Unput rpSBML**: Either a single rpSBML or collection pacakged in a tar.xz
+Advanced Options:
+* **-pathway_id**: (string, default: rp_pathway)
+* **-num_results**: (integer, default: 10) Number of uniprot ID's to assign per reaction 
+* **-direction**: (integer, default: 0) Keep only direction in the database (MetaNetX) or compare both forward and reverse
+* **-noMSA**: (boolean, default: True) Do not perform multiple sequence alignement
+* **-fp**: (string, default: RDK) Chemical fingerprint used in the similarity algorithm
+* **-rxntype**: (string, default: smarts) Type of reaction rules that are passed to Selenzyme
+* **-min_aa_length**: (integer, default: 100) Minimal amino acid length of the enzymatic sequences
 
-Advanced options:
-* **Name of the heterologous pathway**: (default: rp_pathway) Groups ID of the heterologous pathway
-* **IP address of the rpSelenzyme REST service**: IP address of the REST service
+## Ouput
 
-### Output
-
-* **rpSelenzyme**: Either single rpSBML or collection of rpSBML's in a tar.xz
+* **-output**: (string) Path to the output file
 
 ## Installing 
 
@@ -25,24 +33,7 @@ To compile the docker run the following command:
 docker build -t brsynth/rpselenzyme-standalone:dev .
 ```
 
-And then run the container (use tmux or -deamon):
-
-```
-docker run -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' brsynth/selenzyme-rest:dev
-```
-
-### Prerequisites
-
-* Docker - [Install](https://docs.docker.com/v17.09/engine/installation/)
-* RDKit - [Install](https://www.rdkit.org/)
-* Flask - [Install](https://flask-restful.readthedocs.io/en/latest/)
-
-## Contributing
-
-TODO
-
-
-## Testing
+## Running the test
 
 To test the execution of the tool, untar the test.tar.xz and execute the following command:
 
@@ -50,13 +41,18 @@ To test the execution of the tool, untar the test.tar.xz and execute the followi
 python run.py -input test/test_rpThermo.tar -input_format tar -taxonomy_format string -taxonomy_input 83333 -min_aa_length 100 -output test/test_rpSelenzyme.tar
 ```
 
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
 ## Versioning
 
-Version 0.1
+v0.1
 
 ## Authors
 
-* **Melchior du Lac** 
+* **Pablo Carbonell**
+* Melchior du Lac
 
 ## License
 
