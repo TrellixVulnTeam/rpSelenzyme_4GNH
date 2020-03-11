@@ -77,7 +77,7 @@ def runSelenzyme_mem(inputTar,
                      direction=0,
                      noMSA=True,
                      fp='RDK',
-                     rxntype='smarts',
+                     rxn_type='smarts',
                      min_aa_length=100):
     #loop through all of them and run FBA on them
     with tarfile.open(fileobj=outputTar, mode='w:xz') as tf:
@@ -85,7 +85,7 @@ def runSelenzyme_mem(inputTar,
             for member in in_tf.getmembers():
                 if not member.name=='':
                     rpsbml = rpSBML.rpSBML(member.name, libsbml.readSBMLFromString(in_tf.extractfile(member).read().decode("utf-8")))
-                    if rpTool.singleSBML(selenzy_data, uniprot_aaLenght, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
+                    if rpTool.singleSBML(selenzy_data, uniprot_aaLenght, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxn_type, min_aa_length):
                         sbml_bytes = libsbml.writeSBMLToString(rpsbml.document).encode('utf-8')
                         fiOut = io.BytesIO(sbml_bytes)
                         info = tarfile.TarInfo(fileName+'.rpsbml.xml')
@@ -104,7 +104,7 @@ def runSelenzyme_hdd(inputTar,
                      direction=0,
                      noMSA=True,
                      fp='RDK',
-                     rxntype='smarts',
+                     rxn_type='smarts',
                      min_aa_length=100):
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
         with tempfile.TemporaryDirectory() as tmpInputFolder:
@@ -115,7 +115,7 @@ def runSelenzyme_hdd(inputTar,
                 fileName = sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', '')
                 rpsbml = rpSBML.rpSBML(fileName)
                 rpsbml.readSBML(sbml_path)
-                if rpTool.singleSBML(selenzy_data, uniprot_aaLenght, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
+                if rpTool.singleSBML(selenzy_data, uniprot_aaLenght, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxn_type, min_aa_length):
                     rpsbml.writeSBML(tmpOutputFolder)
                 rpsbml = None
             with tarfile.open(fileobj=outputTar, mode='w:xz') as ot:
@@ -146,7 +146,7 @@ class RestQuery(Resource):
                          params['direction'],
                          params['noMSA'],
                          params['fp'],
-                         params['rxntype'],
+                         params['rxn_type'],
                          params['min_aa_length'])
         ######## MEM #######
         #runSelenzyme_mem(inputTar, outputTar, params['pathway_id'], params['host_taxonomy'], params['num_results'])
