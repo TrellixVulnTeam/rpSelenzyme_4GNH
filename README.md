@@ -28,6 +28,10 @@ docker build -t brsynth/rpselenzyme-rest:dev .
 And then run the container (use tmux or -deamon):
 
 ```
+docker run -p 8881:8888 brsynth/rpselenzyme-rest:dev
+```
+
+```
 docker run -p 5000:5000 -e LD_LIBRARY_PATH='/opt/conda/bin/../lib' brsynth/selenzyme-rest:dev
 ```
 

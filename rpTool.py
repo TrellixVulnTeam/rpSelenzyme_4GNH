@@ -40,7 +40,6 @@ def singleReactionRule(selenzy_data,
 
 
 def singleSBML(selenzy_data,
-               min_aa_length,
                rpsbml,
                host_taxonomy_id=83333,
                pathway_id='rp_pathway',

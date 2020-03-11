@@ -23,6 +23,8 @@ import tempfile
 sys.path.insert(0, '/home/')
 import rpSBML
 import rpTool
+sys.path.insert(0, '/home/selenzy/')
+import Selenzy
 
 ############## Cache ##############
 
@@ -83,7 +85,7 @@ def runSelenzyme_mem(inputTar,
             for member in in_tf.getmembers():
                 if not member.name=='':
                     rpsbml = rpSBML.rpSBML(member.name, libsbml.readSBMLFromString(in_tf.extractfile(member).read().decode("utf-8")))
-                    if rpTool.singleSBML(selenzy_data, min_aa_length, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
+                    if rpTool.singleSBML(selenzy_data, uniprot_aaLenght, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
                         sbml_bytes = libsbml.writeSBMLToString(rpsbml.document).encode('utf-8')
                         fiOut = io.BytesIO(sbml_bytes)
                         info = tarfile.TarInfo(fileName+'.rpsbml.xml')
@@ -113,7 +115,7 @@ def runSelenzyme_hdd(inputTar,
                 fileName = sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', '')
                 rpsbml = rpSBML.rpSBML(fileName)
                 rpsbml.readSBML(sbml_path)
-                if rpTool.singleSBML(selenzy_data, min_aa_length, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
+                if rpTool.singleSBML(selenzy_data, uniprot_aaLenght, rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
                     rpsbml.writeSBML(tmpOutputFolder)
                 rpsbml = None
             with tarfile.open(fileobj=outputTar, mode='w:xz') as ot:
