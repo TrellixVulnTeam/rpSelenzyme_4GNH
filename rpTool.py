@@ -15,24 +15,10 @@ import csv
 sys.path.insert(0, '/home/selenzy/')
 import Selenzy
 
-## global parameter 
-DATADIR = '/home/selenzy/data/'
-pc = Selenzy.readData(DATADIR)
-
-############## Cache ##############
-
-uniprot_aaLenght = {}
-with open(DATADIR+'sel_len.csv') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    next(csv_reader)
-    for row in csv_reader:
-        uniprot_aaLenght[row[0].split('|')[1]] = int(row[1])
-
-############## Tools ##############
-
 #Empty to follow the rp tools writting convention
 
-def singleReactionRule(reaction_smile,
+def singleReactionRule(selenzy_data,
+                       reaction_smile,
                        host_taxonomy_id,
                        num_results=50,
                        direction=0,
@@ -42,7 +28,7 @@ def singleReactionRule(reaction_smile,
     uniprotID_score = {}
     score = Selenzy.seqScore()
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
-        success, results = Selenzy.analyse(['-'+rxntype, reaction_smile], num_results, DATADIR, tmpOutputFolder, 'tmp.csv', 0, host_taxonomy_id, pc=pc, NoMSA=noMSA)
+        success, results = Selenzy.analyse(['-'+rxntype, reaction_smile], num_results, DATADIR, tmpOutputFolder, 'tmp.csv', 0, host_taxonomy_id, pc=selenzy_data, NoMSA=noMSA)
         data = Selenzy.updateScore(tmpOutputFolder+'/tmp.csv', score)
         val = json.loads(data.to_json())
         if 'Seq. ID' in val and len(val['Seq. ID'])>0:
@@ -53,7 +39,9 @@ def singleReactionRule(reaction_smile,
         return uniprotID_score
 
 
-def singleSBML(rpsbml,
+def singleSBML(selenzy_data,
+               min_aa_length,
+               rpsbml,
                host_taxonomy_id=83333,
                pathway_id='rp_pathway',
                num_results=50,
@@ -67,7 +55,7 @@ def singleSBML(rpsbml,
         brs_reac = rpsbml.readBRSYNTHAnnotation(reac.getAnnotation())
         if brs_reac['smiles']:
             try:
-                uniprotID_score = singleReactionRule(brs_reac['smiles'], host_taxonomy_id, num_results, direction, noMSA, fp, rxntype)
+                uniprotID_score = singleReactionRule(selenzy_data, brs_reac['smiles'], host_taxonomy_id, num_results, direction, noMSA, fp, rxntype)
                 uniprotID_score_restricted = {}
                 for uniprot in uniprotID_score:
                     try:
@@ -85,6 +73,3 @@ def singleSBML(rpsbml,
             logging.warning('Cannot retreive the reaction rule of model '+str(rpsbml.model.getId()))
             return False
     return True
-
-
-
