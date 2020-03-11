@@ -24,11 +24,11 @@ def singleReactionRule(selenzy_data,
                        direction=0,
                        noMSA=True,
                        fp='RDK',
-                       rxntype='smarts'):
+                       rxn_type='smarts'):
     uniprotID_score = {}
     score = Selenzy.seqScore()
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
-        success, results = Selenzy.analyse(['-'+rxntype, reaction_smile], num_results, DATADIR, tmpOutputFolder, 'tmp.csv', 0, host_taxonomy_id, pc=selenzy_data, NoMSA=noMSA)
+        success, results = Selenzy.analyse(['-'+rxn_type, reaction_smile], num_results, DATADIR, tmpOutputFolder, 'tmp.csv', 0, host_taxonomy_id, pc=selenzy_data, NoMSA=noMSA)
         data = Selenzy.updateScore(tmpOutputFolder+'/tmp.csv', score)
         val = json.loads(data.to_json())
         if 'Seq. ID' in val and len(val['Seq. ID'])>0:
@@ -47,14 +47,14 @@ def singleSBML(selenzy_data,
                direction=0,
                noMSA=True,
                fp='RDK',
-               rxntype='smarts',
+               rxn_type='smarts',
                min_aa_length=100):
     for reac_id in rpsbml.readRPpathwayIDs(pathway_id):
         reac = rpsbml.model.getReaction(reac_id)
         brs_reac = rpsbml.readBRSYNTHAnnotation(reac.getAnnotation())
         if brs_reac['smiles']:
             try:
-                uniprotID_score = singleReactionRule(selenzy_data, brs_reac['smiles'], host_taxonomy_id, num_results, direction, noMSA, fp, rxntype)
+                uniprotID_score = singleReactionRule(selenzy_data, brs_reac['smiles'], host_taxonomy_id, num_results, direction, noMSA, fp, rxn_type)
                 uniprotID_score_restricted = {}
                 for uniprot in uniprotID_score:
                     try:
