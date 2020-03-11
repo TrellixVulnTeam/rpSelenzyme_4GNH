@@ -29,7 +29,7 @@ import Selenzy
 ############## Cache ##############
 
 DATADIR = '/home/selenzy/data/'
-pc = Selenzy.readData(DATADIR)
+selenzy_data = Selenzy.readData(DATADIR)
 
 uniprot_aaLenght = {}
 with open(DATADIR+'sel_len.csv') as csv_file:
