@@ -38,8 +38,8 @@ def singleReactionRule(selenzy_data,
             raise ValueError
         return uniprotID_score
 
-
 def singleSBML(selenzy_data,
+               uniprot_aaLenght,
                rpsbml,
                host_taxonomy_id=83333,
                pathway_id='rp_pathway',
