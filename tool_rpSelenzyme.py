@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser.add_argument('-pathway_id', type=str, default='rp_pathway')
     parser.add_argument('-num_results', type=int, default=10)
     parser.add_argument('-taxonomy_format', type=str)
-    parser.add_argument('-taxonomy_input', type=str)
+    parser.add_argument('-taxonomy_input', type=int)
     parser.add_argument('-direction', type=int, default=0)
     parser.add_argument('-noMSA', type=bool, default=True)
     parser.add_argument('-fp', type=str, default='RDK')
