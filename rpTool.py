@@ -15,6 +15,8 @@ import csv
 sys.path.insert(0, '/home/selenzy/')
 import Selenzy
 
+DATADIR = '/home/selenzy/data/'
+
 #Empty to follow the rp tools writting convention
 
 def singleReactionRule(selenzy_data,
