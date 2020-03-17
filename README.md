@@ -27,6 +27,8 @@ Advanced Options:
 
 ## Installing 
 
+WARNING: This tool requires a dataset that is not available to the public. To gain access to this data please contact the author of the tool.
+
 To compile the docker run the following command:
 
 ```
