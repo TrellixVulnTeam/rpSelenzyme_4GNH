@@ -45,7 +45,7 @@ docker run -p 8888:8888 brsynth/rpselenzyme-rest:dev
 Then untar the test.tar.xz and execute the following command:
 
 ```
-python test/tool_rpSelenzyme.py -input test/test_rpThermo.tar -input_format tar -taxonomy_format string -taxonomy_input 83333 -min_aa_length 100 -output test/test_rpSelenzyme.tar -server_url http://0.0.0.0:8888
+python tool_rpSelenzyme.py -input test/test_rpThermo.tar -input_format tar -taxonomy_format string -taxonomy_input 83333 -min_aa_length 100 -output test/test_rpSelenzyme.tar -server_url http://0.0.0.0:8888
 ```
 
 ## Contributing

@@ -1,3 +1,6 @@
-test/test_output.tar
+test/
 data.tar.xz
 BCK/
+__pycache__/
+data_090320.tar.xz
+rpSBML.py
