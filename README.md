@@ -1,4 +1,4 @@
-# rpSelenzyme REST service
+# rpSelenzyme
 
 * Docker Image: [brsynth/rpselenzyme-standalone](https://hub.docker.com/r/brsynth/rpselenzyme-rest)
 
@@ -25,6 +25,10 @@ Advanced Options:
 ## Ouput
 
 * **-output**: (string) Path to the output file
+
+## Dependencies
+
+* Base Docker Image: [brsynth/rpBase](https://hub.docker.com/r/brsynth/rpbase)
 
 ## Installing 
 
