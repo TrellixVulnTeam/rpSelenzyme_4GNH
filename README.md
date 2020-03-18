@@ -25,6 +25,10 @@ Advanced Options:
 
 * **-output**: (string) Path to the output file
 
+## Dependencies
+
+* Base Docker Image: [brsynth/rpBase](https://hub.docker.com/r/brsynth/rpbase)
+
 ## Installing 
 
 WARNING: This tool requires a dataset that is not available to the public. To gain access to this data please contact the author of the tool.
