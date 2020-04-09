@@ -37,8 +37,8 @@ def runSelenzyme_mem(inputTar,
                      rxntype='smarts',
                      min_aa_length=100):
     #loop through all of them and run FBA on them
-    with tarfile.open(fileobj=outputTar, mode='w:xz') as tf:
-        with tarfile.open(fileobj=inputTar, mode='r:xz') as in_tf:
+    with tarfile.open(fileobj=outputTar, mode='w:gz') as tf:
+        with tarfile.open(fileobj=inputTar, mode='r:gz') as in_tf:
             for member in in_tf.getmembers():
                 if not member.name=='':
                     rpsbml = rpSBML.rpSBML(member.name, libsbml.readSBMLFromString(in_tf.extractfile(member).read().decode("utf-8")))
@@ -65,7 +65,7 @@ def runSelenzyme_hdd(inputTar,
                      min_aa_length=100):
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
         with tempfile.TemporaryDirectory() as tmpInputFolder:
-            tar = tarfile.open(inputTar, mode='r:xz')
+            tar = tarfile.open(inputTar, mode='r:gz')
             tar.extractall(path=tmpInputFolder)
             tar.close()
             if len(glob.glob(tmpInputFolder+'/*'))==0:
@@ -81,9 +81,9 @@ def runSelenzyme_hdd(inputTar,
             if len(glob.glob(tmpOutputFolder+'/*'))==0:
                 logging.error('rpSelenzyme has not produced any results')
                 return False
-            with tarfile.open(outputTar, mode='w:xz') as ot:
+            with tarfile.open(outputTar, mode='w:gz') as ot:
                 for sbml_path in glob.glob(tmpOutputFolder+'/*'):
-                    fileName = str(sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', ''))+'.rpsbml.xml'
+                    fileName = str(sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', ''))+'.sbml.xml'
                     info = tarfile.TarInfo(fileName)
                     info.size = os.path.getsize(sbml_path)
                     ot.addfile(tarinfo=info, fileobj=open(sbml_path, 'rb'))
