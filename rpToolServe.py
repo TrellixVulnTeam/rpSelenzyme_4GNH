@@ -16,6 +16,7 @@ import csv
 import sys
 import glob
 import tempfile
+import logging
 
 sys.path.insert(0, '/home/')
 import rpSBML
@@ -67,6 +68,9 @@ def runSelenzyme_hdd(inputTar,
             tar = tarfile.open(inputTar, mode='r:xz')
             tar.extractall(path=tmpInputFolder)
             tar.close()
+            if len(glob.glob(tmpInputFolder+'/*'))==0:
+                logging.error('Input file is empty')
+                return False
             for sbml_path in glob.glob(tmpInputFolder+'/*'):
                 fileName = sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', '')
                 rpsbml = rpSBML.rpSBML(fileName)
@@ -74,9 +78,13 @@ def runSelenzyme_hdd(inputTar,
                 if rpTool.singleSBML(rpsbml, host_taxonomy_id, pathway_id, num_results, direction, noMSA, fp, rxntype, min_aa_length):
                     rpsbml.writeSBML(tmpOutputFolder)
                 rpsbml = None
+            if len(glob.glob(tmpOutputFolder+'/*'))==0:
+                logging.error('rpSelenzyme has not produced any results')
+                return False
             with tarfile.open(outputTar, mode='w:xz') as ot:
                 for sbml_path in glob.glob(tmpOutputFolder+'/*'):
                     fileName = str(sbml_path.split('/')[-1].replace('.sbml', '').replace('.xml', '').replace('.rpsbml', ''))+'.rpsbml.xml'
                     info = tarfile.TarInfo(fileName)
                     info.size = os.path.getsize(sbml_path)
                     ot.addfile(tarinfo=info, fileobj=open(sbml_path, 'rb'))
+    return True
