@@ -38,7 +38,7 @@ def runSelenzyme_mem(inputTar,
                      min_aa_length=100):
     #loop through all of them and run FBA on them
     with tarfile.open(fileobj=outputTar, mode='w:gz') as tf:
-        with tarfile.open(fileobj=inputTar, mode='r:gz') as in_tf:
+        with tarfile.open(fileobj=inputTar, mode='r') as in_tf:
             for member in in_tf.getmembers():
                 if not member.name=='':
                     rpsbml = rpSBML.rpSBML(member.name, libsbml.readSBMLFromString(in_tf.extractfile(member).read().decode("utf-8")))
@@ -65,7 +65,7 @@ def runSelenzyme_hdd(inputTar,
                      min_aa_length=100):
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
         with tempfile.TemporaryDirectory() as tmpInputFolder:
-            tar = tarfile.open(inputTar, mode='r:gz')
+            tar = tarfile.open(inputTar, mode='r')
             tar.extractall(path=tmpInputFolder)
             tar.close()
             if len(glob.glob(tmpInputFolder+'/*'))==0:
