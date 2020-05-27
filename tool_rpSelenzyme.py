@@ -24,16 +24,19 @@ if __name__ == "__main__":
     parser.add_argument('-input', type=str)
     parser.add_argument('-output', type=str)
     parser.add_argument('-input_format', type=str)
-    parser.add_argument('-pathway_id', type=str, default='rp_pathway')
+    parser.add_argument('-pathway_id', type=str)
     parser.add_argument('-num_results', type=int, default=10)
     parser.add_argument('-taxonomy_format', type=str)
-    parser.add_argument('-taxonomy_input', type=int)
+    parser.add_argument('-taxonomy_input', type=str)
     parser.add_argument('-direction', type=int, default=0)
     parser.add_argument('-noMSA', type=bool, default=True)
     parser.add_argument('-fp', type=str, default='RDK')
-    parser.add_argument('-rxntype', type=str, default='smarts')
+    parser.add_argument('-rxn_type', type=str, default='smarts')
     parser.add_argument('-min_aa_length', type=int, default=100)
     params = parser.parse_args()
+    if params.min_aa_length<=0:
+        logging.error('Cannot have protein size of less or equal to 0: '+str(params.min_aa_length))
+        exit(1)
     tax_id = -1
     ##### taxonomy #######
     if params.taxonomy_format=='json':
@@ -61,14 +64,14 @@ if __name__ == "__main__":
                                      params.direction,
                                      noMSA,
                                      params.fp,
-                                     params.rxntype,
+                                     params.rxn_type,
                                      params.min_aa_length)
     elif params.input_format=='sbml':
         #make the tar.xz 
         with tempfile.TemporaryDirectory() as tmpOutputFolder:
-            input_tar = tmpOutputFolder+'/tmp_input.tar.xz'
-            output_tar = tmpOutputFolder+'/tmp_output.tar.xz'
-            with tarfile.open(input_tar, mode='w:xz') as tf:
+            input_tar = tmpOutputFolder+'/tmp_input.tar'
+            output_tar = tmpOutputFolder+'/tmp_output.tar'
+            with tarfile.open(input_tar, mode='w:gz') as tf:
                 info = tarfile.TarInfo('single.rpsbml.xml') #need to change the name since galaxy creates .dat files
                 info.size = os.path.getsize(params.input)
                 tf.addfile(tarinfo=info, fileobj=open(params.input, 'rb'))
@@ -80,7 +83,7 @@ if __name__ == "__main__":
                                          params.direction,
                                          noMSA,
                                          params.fp,
-                                         params.rxntype,
+                                         params.rxn_type,
                                          params.min_aa_length)
             with tarfile.open(output_tar) as outTar:
                 outTar.extractall(tmpOutputFolder)
