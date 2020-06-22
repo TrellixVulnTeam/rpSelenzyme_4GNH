@@ -71,6 +71,7 @@ def main(inputfile,
         container = docker_client.containers.run(image_str,
                                                  command,
                                                  detach=True,
+                                                 remove=True,
                                                  stderr=True,
                                                  volumes={tmpOutputFolder+'/': {'bind': '/home/tmp_output', 'mode': 'rw'}})
         container.wait()

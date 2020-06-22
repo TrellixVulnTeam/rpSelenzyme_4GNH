@@ -16,4 +16,4 @@ RUN rm /home/selenzy/data.tar.xz
 
 COPY rpToolServe.py /home/
 COPY rpTool.py /home/
-COPY tool_rpSelenzyme.py /home/
+COPY galaxy/code/tool_rpSelenzyme.py /home/
