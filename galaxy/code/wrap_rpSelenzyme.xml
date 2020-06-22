@@ -1,0 +1,137 @@
+<tool id="rpSelenzyme" name="Selenzyme" version="0.1">
+  <description>Read the reaction SMILES from the collection of SBML files and query selenzyme for the associated enzymes and their similarity scores</description>
+  <requirements>
+    <container type="docker">brsynth/rpselenzyme-standalone:dev</container>
+  </requirements>
+  <stdio>
+		<regex match="WARNING:" level="warning" />
+		<regex match="ERROR:" level="error" />
+	</stdio>
+  <command detect_errors="exit_code"><![CDATA[
+    '$__tool_directory__/tool_rpSelenzyme.py' -input '$rpsbml.input_rpsbml' -input_format '$rpsbml.format_rpsbml' -taxonomy_format '$taxonomy.format_tax' -taxonomy_input '$taxonomy.input_tax' -output '$output' -pathway_id '$adv.pathway_id' -num_results '$adv.num_results' -direction '$adv.direction' -noMSA '$adv.noMSA' -fp '$adv.fp' -rxn_type '$adv.rxn_type' -min_aa_length '$adv.min_aa_length'
+  ]]></command>
+  <inputs>
+    <conditional name="rpsbml">
+      <param name="format_rpsbml" type="select" label="Input/output format">
+        <option value="tar">TAR</option>
+        <option value="sbml" selected="True">SBML</option>
+      </param>
+      <when value="tar">
+        <param name="input_rpsbml" type="data" format="tar" label="Input file" />
+      </when>
+      <when value="sbml">
+        <param name="input_rpsbml" type="data" format="sbml" label="Input file" />
+      </when>
+    </conditional>
+    <conditional name="taxonomy">
+      <param name="format_tax" type="select" label="Taxonomy ID input format">
+        <option value="string" selected="True">String</option>
+        <option value="json">JSON</option>
+      </param>
+      <when value="string">
+        <param name="input_tax" type="text" value="83333" label="Taxonomy input" />
+      </when>
+      <when value="json">
+        <param name="input_tax" type="data" format="json" label="Taxonomy input" />
+      </when>
+    </conditional>
+		<section name="adv" title="Advanced Options" expanded="false">
+			<param name="pathway_id" type="text" value="rp_pathway" label="SBML heterologous pathway ID" />
+			<param name="num_results" type="integer" value="10" label="Number of results to return" />
+			<param name="direction" type="integer" value="0" label="Keep only direction in the database or compare both forward and reverse?" />
+			<param name="noMSA" type="boolean" value="True" label="Don't use multiple sequence alignment?" />
+			<param name="fp" type="text" value="RDK" label="Chemical fingerprint used in the similarity algorithm" />
+			<param name="rxn_type" type="text" value="smarts" label="SMILES or SMARTS reactions?" />
+			<param name="min_aa_length" type="integer" value="100" label="Filter enzymes by minimal amino acid sequence length" />
+		</section>
+  </inputs>
+  <outputs>
+    <data name="output" format="tar" label="Selenzyme">
+      <change_format>
+        <when input="input.format" value="sbml" format="sbml"/>
+      </change_format>
+    </data>
+  </outputs>
+  <help><![CDATA[
+Selenzyme
+===========
+
+
+
+Scans for the reaction rules and makes a REST request to `Selenzyme <Selenzyme.synbiochem.co.uk>`_ and finds the enzymatic sequences (through Uniprot ID's) of all the reactions in heterologous pathways of rpSBML files.
+
+Input
+-----
+
+Required:
+
+
+* **-input**\ : (string) Path to the input file
+* **-input_format**\ : (string) Valid options: sbml, tar. Format of the input file
+* **-taxonomy_input**\ : (integer) Host taxomonomy ID of the organism the enzymes will be expressed in
+* **-taxonomy_format**\ : (string) Valid options: json, integer. Format of the taxonomy input
+
+Advanced Options:
+
+
+* **-pathway_id**\ : (string, default: rp_pathway)
+* **-num_results**\ : (integer, default: 10) Number of uniprot ID's to assign per reaction 
+* **-direction**\ : (integer, default: 0) Keep only direction in the database (MetaNetX) or compare both forward and reverse
+* **-noMSA**\ : (boolean, default: True) Do not perform multiple sequence alignement
+* **-fp**\ : (string, default: RDK) Chemical fingerprint used in the similarity algorithm
+* **-rxntype**\ : (string, default: smarts) Type of reaction rules that are passed to Selenzyme
+* **-min_aa_length**\ : (integer, default: 100) Minimal amino acid length of the enzymatic sequences
+
+Ouput
+-----
+
+
+* **-output**\ : (string) Path to the output file
+
+Project Links
+---------------------
+
+* `Web Tool <http://selenzyme.synbiochem.co.uk>`_ 
+* `Docker <https://hub.docker.com/r/brsynth/rpselenzyme-standalone>`_
+* `GitHub <https://github.com/pablocarb/selenzy>`_
+
+Version
+----------
+
+v0.1
+
+Authors
+-------
+
+
+* **Pablo Carbonell**
+* Melchior du Lac
+
+License
+-------
+
+`GPL3 <https://raw.githubusercontent.com/pablocarb/selenzy/master/LICENSE>`_
+
+Acknowledgments
+---------------
+
+
+* Thomas Duigou
+* Joan Hérisson
+
+]]></help>
+  <citations>
+    <citation type="bibtex">
+@article{carbonell2018selenzyme,
+  title={Selenzyme: Enzyme selection tool for pathway design},
+  author={Carbonell, Pablo and Wong, Jerry and Swainston, Neil and Takano, Eriko and Turner, Nicholas J and Scrutton, Nigel S and Kell, Douglas B and Breitling, Rainer and Faulon, Jean-Loup},
+  journal={Bioinformatics},
+  volume={34},
+  number={12},
+  pages={2153--2154},
+  year={2018},
+  publisher={Oxford University Press}
+}
+    </citation>
+  </citations>
+</tool>
