@@ -36,7 +36,7 @@ WARNING: This tool requires a dataset that is not available to the public. To ga
 To compile the docker run the following command:
 
 ```
-docker build -t brsynth/rpselenzyme-standalone .
+docker build -t brsynth/rpselenzyme-standalone:v2 .
 ```
 
 ## Running the test

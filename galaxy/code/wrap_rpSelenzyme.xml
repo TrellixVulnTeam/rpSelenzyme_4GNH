@@ -1,7 +1,7 @@
 <tool id="rpSelenzyme" name="Selenzyme" version="0.1">
   <description>Read the reaction SMILES from the collection of SBML files and query selenzyme for the associated enzymes and their similarity scores</description>
   <requirements>
-    <container type="docker">brsynth/rpselenzyme-standalone:dev</container>
+    <container type="docker">brsynth/rpselenzyme-standalone:v2</container>
   </requirements>
   <stdio>
 		<regex match="WARNING:" level="warning" />
