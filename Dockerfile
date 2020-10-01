@@ -3,7 +3,7 @@ FROM brsynth/rpbase:v2
 RUN apt-get install -y libxrender1 libsm6 libxext6
 
 RUN conda install -c rdkit rdkit
-RUN conda install -c anaconda biopython
+RUN conda install -c anaconda biopython==1.77
 RUN conda install -c bioconda emboss
 RUN conda install -c biobuilds t-coffee
 
