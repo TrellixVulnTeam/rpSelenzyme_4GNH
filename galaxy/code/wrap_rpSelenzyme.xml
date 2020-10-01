@@ -5,7 +5,8 @@
   </requirements>
   <stdio>
 		<regex match="WARNING:" level="warning" />
-		<regex match="ERROR:" level="error" />
+		<regex match="^Error" level="warning" />
+		<regex match="\] ERROR:" level="error" />
 	</stdio>
   <command detect_errors="exit_code"><![CDATA[
     '$__tool_directory__/tool_rpSelenzyme.py' -input '$rpsbml.input_rpsbml' -input_format '$rpsbml.format_rpsbml' -taxonomy_format '$taxonomy.format_tax' -taxonomy_input '$taxonomy.input_tax' -output '$output' -pathway_id '$adv.pathway_id' -num_results '$adv.num_results' -direction '$adv.direction' -noMSA '$adv.noMSA' -fp '$adv.fp' -rxn_type '$adv.rxn_type' -min_aa_length '$adv.min_aa_length'
