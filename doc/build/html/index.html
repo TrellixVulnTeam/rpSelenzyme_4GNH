@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rpSelenzyme’s documentation &#8212; rpSelenzyme v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="rpselenzyme-s-documentation">
+<h1>rpSelenzyme’s documentation<a class="headerlink" href="#rpselenzyme-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Welcome to the documentation for rpSelenzyme. This project extends the <a class="reference external" href="https://github.com/pablocarb/selenzyme_tool">Selenzyme</a> project from Pablo Carbonel to be used by <a class="reference external" href="https://github.com/Galaxy-SynBioCAD/rpBase">rpSBML</a> files, and parse the <a class="reference external" href="https://retrorules.org/doc">ReactionRules</a> within the files.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>First build the <a class="reference external" href="https://github.com/Galaxy-SynBioCAD/rpBase">rpBase</a> docker before building the local docker:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build -t brsynth/rpselenzyme-standalone:v2 -f Dockerfile .
+</pre></div>
+</div>
+<p>To call the docker locally you can use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python run.py -input /path/to/file -input_format tar -taxonomy_input <span class="m">83333</span> -taxonomy_format string -output /path/to/output
+</pre></div>
+</div>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<dl class="py class">
+<dt id="rpToolServe.runSelenzyme_hdd">
+<em class="property">class </em><code class="sig-prename descclassname">rpToolServe.</code><code class="sig-name descname">runSelenzyme_hdd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputTar</span></em>, <em class="sig-param"><span class="n">outputTar</span></em>, <em class="sig-param"><span class="n">pathway_id</span><span class="o">=</span><span class="default_value">'rp_pathway'</span></em>, <em class="sig-param"><span class="n">host_taxonomy_id</span><span class="o">=</span><span class="default_value">83333</span></em>, <em class="sig-param"><span class="n">num_results</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">noMSA</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fp</span><span class="o">=</span><span class="default_value">'RDK'</span></em>, <em class="sig-param"><span class="n">rxntype</span><span class="o">=</span><span class="default_value">'smarts'</span></em>, <em class="sig-param"><span class="n">min_aa_length</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rpToolServe.runSelenzyme_hdd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run rpSelenzyme on a collection of rpSBML files in the form of a TAR file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputTar</strong> – The path to the input collection of rpSBML as a TAR file</p></li>
+<li><p><strong>outputTar</strong> – The output file path</p></li>
+<li><p><strong>pathway_id</strong> – Group id of the heterologous pathway (Default: rp_pathway)</p></li>
+<li><p><strong>host_taxonomy_id</strong> – The taxonomy id of the host (Default: 83333, ie. E.Coli)</p></li>
+<li><p><strong>num_results</strong> – Number of UNIPROT id’s to return per reaction rule (Default: 50)</p></li>
+<li><p><strong>direction</strong> – Forward (1) to reverse (0) direction (Default: 0)</p></li>
+<li><p><strong>noMSA</strong> – Perform sequence alignement or not (Default: True)</p></li>
+<li><p><strong>fp</strong> – Fingerprint for reactants for quickRSiml (Default: RDK)</p></li>
+<li><p><strong>rxntype</strong> – The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)</p></li>
+<li><p><strong>min_aa_length</strong> – Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)</p></li>
+<li><p><strong>inputTar</strong> – str</p></li>
+<li><p><strong>outputTar</strong> – str</p></li>
+<li><p><strong>reaction_smile</strong> – str</p></li>
+<li><p><strong>host_taxonomy_id</strong> – int</p></li>
+<li><p><strong>num_results</strong> – int</p></li>
+<li><p><strong>direction</strong> – int</p></li>
+<li><p><strong>noMSA</strong> – bool</p></li>
+<li><p><strong>fp</strong> – str</p></li>
+<li><p><strong>rxntype</strong> – str</p></li>
+<li><p><strong>min_aa_length</strong> – int</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The success or failure of the function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="rpTool.singleReactionRule">
+<em class="property">class </em><code class="sig-prename descclassname">rpTool.</code><code class="sig-name descname">singleReactionRule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reaction_rule</span></em>, <em class="sig-param"><span class="n">host_taxonomy_id</span></em>, <em class="sig-param"><span class="n">num_results</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">noMSA</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fp</span><span class="o">=</span><span class="default_value">'RDK'</span></em>, <em class="sig-param"><span class="n">rxntype</span><span class="o">=</span><span class="default_value">'smarts'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rpTool.singleReactionRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query Selenzyme given a single reaction rule</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reaction_rule</strong> – The reaction rule</p></li>
+<li><p><strong>host_taxonomy_id</strong> – The taxonomy id associated with the reaction rule</p></li>
+<li><p><strong>num_results</strong> – The number of uniprot ids to return (Default: 50)</p></li>
+<li><p><strong>direction</strong> – Forward (1) to reverse (0) direction (Default: 0)</p></li>
+<li><p><strong>noMSA</strong> – Perform sequence alignement or not (Default: True)</p></li>
+<li><p><strong>fp</strong> – Fingerprint for reactants for quickRSiml (Default: RDK)</p></li>
+<li><p><strong>rxntype</strong> – The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)</p></li>
+<li><p><strong>reaction_rule</strong> – str</p></li>
+<li><p><strong>host_taxonomy_id</strong> – int</p></li>
+<li><p><strong>num_results</strong> – int</p></li>
+<li><p><strong>direction</strong> – int</p></li>
+<li><p><strong>noMSA</strong> – bool</p></li>
+<li><p><strong>fp</strong> – str</p></li>
+<li><p><strong>rxntype</strong> – str</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The UNIPROT id’s and its associated score</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="rpTool.singleSBML">
+<em class="property">class </em><code class="sig-prename descclassname">rpTool.</code><code class="sig-name descname">singleSBML</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rpsbml</span></em>, <em class="sig-param"><span class="n">host_taxonomy_id</span><span class="o">=</span><span class="default_value">83333</span></em>, <em class="sig-param"><span class="n">pathway_id</span><span class="o">=</span><span class="default_value">'rp_pathway'</span></em>, <em class="sig-param"><span class="n">num_results</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">noMSA</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fp</span><span class="o">=</span><span class="default_value">'RDK'</span></em>, <em class="sig-param"><span class="n">rxntype</span><span class="o">=</span><span class="default_value">'smarts'</span></em>, <em class="sig-param"><span class="n">min_aa_length</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rpTool.singleSBML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return UNIPROT id’s associated with each reaction using Selenzyme, from a rpSBML object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rpsbml</strong> – The input rppSBML object</p></li>
+<li><p><strong>host_taxonomy_id</strong> – The taxonomy id of the host (Default: 83333, ie. E.Coli)</p></li>
+<li><p><strong>pathway_id</strong> – Group id of the heterologous pathway (Default: rp_pathway)</p></li>
+<li><p><strong>num_results</strong> – Number of UNIPROT id’s to return per reaction rule (Default: 50)</p></li>
+<li><p><strong>direction</strong> – Forward (1) to reverse (0) direction (Default: 0)</p></li>
+<li><p><strong>noMSA</strong> – Perform sequence alignement or not (Default: True)</p></li>
+<li><p><strong>fp</strong> – Fingerprint for reactants for quickRSiml (Default: RDK)</p></li>
+<li><p><strong>rxntype</strong> – The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)</p></li>
+<li><p><strong>min_aa_length</strong> – Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)</p></li>
+<li><p><strong>rpsbml</strong> – rpSBML object</p></li>
+<li><p><strong>host_taxonomy_id</strong> – int</p></li>
+<li><p><strong>pathway_id</strong> – str</p></li>
+<li><p><strong>num_results</strong> – int</p></li>
+<li><p><strong>direction</strong> – int</p></li>
+<li><p><strong>noMSA</strong> – bool</p></li>
+<li><p><strong>fp</strong> – str</p></li>
+<li><p><strong>rxntype</strong> – str</p></li>
+<li><p><strong>min_aa_length</strong> – int</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The success or failure of the function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="run.main">
+<em class="property">class </em><code class="sig-prename descclassname">run.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputfile</span></em>, <em class="sig-param"><span class="n">output</span></em>, <em class="sig-param"><span class="n">input_format</span></em>, <em class="sig-param"><span class="n">pathway_id</span></em>, <em class="sig-param"><span class="n">num_results</span></em>, <em class="sig-param"><span class="n">taxonomy_format</span></em>, <em class="sig-param"><span class="n">taxonomy_input</span></em>, <em class="sig-param"><span class="n">direction</span></em>, <em class="sig-param"><span class="n">noMSA</span></em>, <em class="sig-param"><span class="n">fp</span></em>, <em class="sig-param"><span class="n">rxntype</span></em>, <em class="sig-param"><span class="n">min_aa_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#run.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run rpSelenzyme on a collection of rpSBML files in the form of a TAR file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputTar</strong> – The path to the input collection of rpSBML as a TAR file or single rpSBML file</p></li>
+<li><p><strong>outputTar</strong> – The output file path</p></li>
+<li><p><strong>input_format</strong> – The input file format. Valid options: sbml, tar</p></li>
+<li><p><strong>pathway_id</strong> – Group id of the heterologous pathway (Default: rp_pathway)</p></li>
+<li><p><strong>num_results</strong> – Number of UNIPROT id’s to return per reaction rule (Default: 50)</p></li>
+<li><p><strong>taxonomy_format</strong> – The input format of the taxonomy. Valid options: json, str</p></li>
+<li><p><strong>taxonomy_input</strong> – The input of the taxonomy id of the host oeganism</p></li>
+<li><p><strong>direction</strong> – Forward (1) to reverse (0) direction (Default: 0)</p></li>
+<li><p><strong>noMSA</strong> – Perform sequence alignement or not (Default: True)</p></li>
+<li><p><strong>fp</strong> – Fingerprint for reactants for quickRSiml (Default: RDK)</p></li>
+<li><p><strong>rxntype</strong> – The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)</p></li>
+<li><p><strong>min_aa_length</strong> – Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)</p></li>
+<li><p><strong>inputTar</strong> – str</p></li>
+<li><p><strong>outputTar</strong> – str</p></li>
+<li><p><strong>input_format</strong> – str</p></li>
+<li><p><strong>pathway_id</strong> – str</p></li>
+<li><p><strong>num_results</strong> – int</p></li>
+<li><p><strong>taxonomy_format</strong> – str</p></li>
+<li><p><strong>taxonomy_input</strong> – str</p></li>
+<li><p><strong>direction</strong> – int</p></li>
+<li><p><strong>noMSA</strong> – bool</p></li>
+<li><p><strong>fp</strong> – str</p></li>
+<li><p><strong>rxntype</strong> – str</p></li>
+<li><p><strong>min_aa_length</strong> – int</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">rpSelenzyme</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Pablo Carbonell, Melchior du Lac.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

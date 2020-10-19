@@ -23,9 +23,6 @@ import rpSBML
 import rpTool
 
 
-##
-#
-#
 def runSelenzyme_mem(inputTar,
                      outputTar,
                      pathway_id='rp_pathway',
@@ -36,6 +33,33 @@ def runSelenzyme_mem(inputTar,
                      fp='RDK',
                      rxntype='smarts',
                      min_aa_length=100):
+    """Run rpSelenzyme on a collection of rpSBML files in the form of a TAR file without writing to disk
+
+    :param inputTar: The path to the input collection of rpSBML as a TAR file
+    :param outputTar: The output file path
+    :param pathway_id: Group id of the heterologous pathway (Default: rp_pathway)
+    :param host_taxonomy_id: The taxonomy id of the host (Default: 83333, ie. E.Coli)
+    :param num_results: Number of UNIPROT id's to return per reaction rule (Default: 50)
+    :param direction: Forward (1) to reverse (0) direction (Default: 0)
+    :param noMSA: Perform sequence alignement or not (Default: True)
+    :param fp: Fingerprint for reactants for quickRSiml (Default: RDK)
+    :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
+    :param min_aa_length: Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)
+
+    :param inputTar: str
+    :param outputTar: str
+    :param reaction_smile: str
+    :param host_taxonomy_id: int
+    :param num_results: int
+    :param direction: int
+    :param noMSA: bool
+    :param fp: str
+    :param rxntype: str 
+    :param min_aa_length: int
+
+    :rtype: bool
+    :return: The success or failure of the function
+    """
     #loop through all of them and run FBA on them
     with tarfile.open(fileobj=outputTar, mode='w:gz') as tf:
         with tarfile.open(fileobj=inputTar, mode='r') as in_tf:
@@ -50,9 +74,6 @@ def runSelenzyme_mem(inputTar,
                         tf.addfile(tarinfo=info, fileobj=fiOut)
 
 
-## run using HDD 3X less than the above function
-#
-#
 def runSelenzyme_hdd(inputTar,
                      outputTar,
                      pathway_id='rp_pathway',
@@ -63,6 +84,33 @@ def runSelenzyme_hdd(inputTar,
                      fp='RDK',
                      rxntype='smarts',
                      min_aa_length=100):
+    """Run rpSelenzyme on a collection of rpSBML files in the form of a TAR file
+
+    :param inputTar: The path to the input collection of rpSBML as a TAR file
+    :param outputTar: The output file path
+    :param pathway_id: Group id of the heterologous pathway (Default: rp_pathway)
+    :param host_taxonomy_id: The taxonomy id of the host (Default: 83333, ie. E.Coli)
+    :param num_results: Number of UNIPROT id's to return per reaction rule (Default: 50)
+    :param direction: Forward (1) to reverse (0) direction (Default: 0)
+    :param noMSA: Perform sequence alignement or not (Default: True)
+    :param fp: Fingerprint for reactants for quickRSiml (Default: RDK)
+    :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
+    :param min_aa_length: Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)
+
+    :param inputTar: str
+    :param outputTar: str
+    :param reaction_smile: str
+    :param host_taxonomy_id: int
+    :param num_results: int
+    :param direction: int
+    :param noMSA: bool
+    :param fp: str
+    :param rxntype: str 
+    :param min_aa_length: int
+
+    :rtype: bool
+    :return: The success or failure of the function
+    """
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
         with tempfile.TemporaryDirectory() as tmpInputFolder:
             tar = tarfile.open(inputTar, mode='r')

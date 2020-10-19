@@ -29,6 +29,37 @@ def main(inputfile,
          fp,
          rxntype,
          min_aa_length):
+    """Run rpSelenzyme on a collection of rpSBML files in the form of a TAR file
+
+    :param inputTar: The path to the input collection of rpSBML as a TAR file or single rpSBML file
+    :param outputTar: The output file path
+    :param input_format: The input file format. Valid options: sbml, tar
+    :param pathway_id: Group id of the heterologous pathway (Default: rp_pathway)
+    :param num_results: Number of UNIPROT id's to return per reaction rule (Default: 50)
+    :param taxonomy_format: The input format of the taxonomy. Valid options: json, str
+    :param taxonomy_input: The input of the taxonomy id of the host oeganism
+    :param direction: Forward (1) to reverse (0) direction (Default: 0)
+    :param noMSA: Perform sequence alignement or not (Default: True)
+    :param fp: Fingerprint for reactants for quickRSiml (Default: RDK)
+    :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
+    :param min_aa_length: Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)
+
+    :param inputTar: str
+    :param outputTar: str
+    :param input_format: str
+    :param pathway_id: str
+    :param num_results: int
+    :param taxonomy_format: str
+    :param taxonomy_input: str
+    :param direction: int
+    :param noMSA: bool
+    :param fp: str
+    :param rxntype: str 
+    :param min_aa_length: int
+
+    :rtype: None
+    :return: None
+    """
     docker_client = docker.from_env()
     image_str = 'brsynth/rpselenzyme-standalone'
     try:
@@ -42,43 +73,55 @@ def main(inputfile,
             logging.error('Cannot pull image: '+str(image_str))
             exit(1)
     with tempfile.TemporaryDirectory() as tmpOutputFolder:
-        shutil.copy(inputfile, tmpOutputFolder+'/input.dat')
-        command = ['/home/tool_rpSelenzyme.py',
-                   '-input',
-                   '/home/tmp_output/input.dat',
-                   '-output',
-                   '/home/tmp_output/output.dat',
-                   '-input_format',
-                   str(input_format),
-                   '-pathway_id',
-                   str(pathway_id),
-                   '-num_results',
-                   str(num_results),
-                   '-taxonomy_format',
-                   str(taxonomy_format),
-                   '-taxonomy_input',
-                   str(taxonomy_input),
-                   '-direction',
-                   str(direction),
-                   '-noMSA',
-                   str(noMSA),
-                   '-fp',
-                   str(fp),
-                   '-rxntype',
-                   str(rxntype),
-                   '-min_aa_length',
-                   str(min_aa_length)]
-        container = docker_client.containers.run(image_str,
-                                                 command,
-                                                 detach=True,
-                                                 remove=True,
-                                                 stderr=True,
-                                                 volumes={tmpOutputFolder+'/': {'bind': '/home/tmp_output', 'mode': 'rw'}})
-        container.wait()
-        err = container.logs(stdout=False, stderr=True)
-        print(err)
-        shutil.copy(tmpOutputFolder+'/output.dat', output)
-        container.remove()
+        if os.path.exists(inputfile):
+            shutil.copy(inputfile, tmpOutputFolder+'/input.dat')
+            command = ['/home/tool_rpSelenzyme.py',
+                       '-input',
+                       '/home/tmp_output/input.dat',
+                       '-output',
+                       '/home/tmp_output/output.dat',
+                       '-input_format',
+                       str(input_format),
+                       '-pathway_id',
+                       str(pathway_id),
+                       '-num_results',
+                       str(num_results),
+                       '-taxonomy_format',
+                       str(taxonomy_format),
+                       '-taxonomy_input',
+                       str(taxonomy_input),
+                       '-direction',
+                       str(direction),
+                       '-noMSA',
+                       str(noMSA),
+                       '-fp',
+                       str(fp),
+                       '-rxntype',
+                       str(rxntype),
+                       '-min_aa_length',
+                       str(min_aa_length)]
+            container = docker_client.containers.run(image_str,
+                                                     command,
+                                                     detach=True,
+                                                     remove=True,
+                                                     stderr=True,
+                                                     volumes={tmpOutputFolder+'/': {'bind': '/home/tmp_output', 'mode': 'rw'}})
+
+            container.wait()
+            err = container.logs(stdout=False, stderr=True)
+            err_str = err.decode('utf-8')
+            if 'ERROR' in err_str:
+                print(err_str)
+            elif 'WARNING' in err_str:
+                print(err_str)
+            if not os.path.exists(tmpOutputFolder+'/output.dat'):
+                print('ERROR: Cannot find the output file: '+str(tmpOutputFolder+'/output.dat'))
+            else:
+                shutil.copy(tmpOutputFolder+'/output.dat', output)
+            container.remove()
+        else:
+            logging.error('Cannot find the input file: '+str(inputfile))
+            exit(1)
 
 
 ##
