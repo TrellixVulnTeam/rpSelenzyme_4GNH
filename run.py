@@ -61,7 +61,7 @@ def main(inputfile,
     :return: None
     """
     docker_client = docker.from_env()
-    image_str = 'brsynth/rpselenzyme-standalone'
+    image_str = 'brsynth/rpselenzyme-standalone:v2'
     try:
         image = docker_client.images.get(image_str)
     except docker.errors.ImageNotFound:
@@ -103,10 +103,8 @@ def main(inputfile,
             container = docker_client.containers.run(image_str,
                                                      command,
                                                      detach=True,
-                                                     remove=True,
                                                      stderr=True,
                                                      volumes={tmpOutputFolder+'/': {'bind': '/home/tmp_output', 'mode': 'rw'}})
-
             container.wait()
             err = container.logs(stdout=False, stderr=True)
             err_str = err.decode('utf-8')
@@ -124,9 +122,6 @@ def main(inputfile,
             exit(1)
 
 
-##
-#
-#
 if __name__ == "__main__":
     parser = argparse.ArgumentParser('Given an SBML, extract the reaction rules and pass them to Selenzyme REST service and write the results to the SBML')
     parser.add_argument('-input', type=str)

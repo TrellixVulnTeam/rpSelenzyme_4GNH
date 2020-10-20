@@ -4,6 +4,7 @@ import sys #exit using sys exit if any error is encountered
 import os
 import requests
 import json
+import logging
 import tempfile
 import glob
 import shutil
@@ -26,12 +27,12 @@ if __name__ == "__main__":
     parser.add_argument('-input_format', type=str)
     parser.add_argument('-pathway_id', type=str)
     parser.add_argument('-num_results', type=int, default=10)
-    parser.add_argument('-taxonomy_format', type=str)
-    parser.add_argument('-taxonomy_input', type=str)
+    parser.add_argument('-taxonomy_format', type=str, default='str')
+    parser.add_argument('-taxonomy_input', type=str, default='511145')
     parser.add_argument('-direction', type=int, default=0)
     parser.add_argument('-noMSA', type=bool, default=True)
     parser.add_argument('-fp', type=str, default='RDK')
-    parser.add_argument('-rxn_type', type=str, default='smarts')
+    parser.add_argument('-rxntype', type=str, default='smarts')
     parser.add_argument('-min_aa_length', type=int, default=100)
     params = parser.parse_args()
     if params.min_aa_length<=0:
@@ -44,16 +45,20 @@ if __name__ == "__main__":
         with open(params.taxonomy_input, 'r') as ti:
             tax_dict = json.load(ti)
             tax_id = int(tax_dict['taxonomy'][0])
-    elif params.taxonomy_format=='string':
+    elif params.taxonomy_format=='string' or params.taxonomy_format=='str' or params.taxonomy_format=='int':
         tax_id = int(params.taxonomy_input)
     else:
-        logging.warning('Taxonomy Input format not recognised')
+        logging.error('Taxonomy Input format not recognised')
+        exit(1)
     ####### MSA #########
     noMSA = True
     if params.noMSA=='True' or params.noMSA=='true' or params.noMSA=='T' or params.noMSA==True:
         noMSA = True
     elif params.noMSA=='False' or params.noMSA=='false' or params.noMSA=='F' or params.noMSA==False:
         noMSA = False
+    else:
+        logging.error('The MSA input cannot be recognised')
+        exit(1)
     ####### input #######
     if params.input_format=='tar':
         rpToolServe.runSelenzyme_hdd(params.input,
@@ -64,7 +69,7 @@ if __name__ == "__main__":
                                      params.direction,
                                      noMSA,
                                      params.fp,
-                                     params.rxn_type,
+                                     params.rxntype,
                                      params.min_aa_length)
     elif params.input_format=='sbml':
         #make the tar.xz 
@@ -83,13 +88,15 @@ if __name__ == "__main__":
                                          params.direction,
                                          noMSA,
                                          params.fp,
-                                         params.rxn_type,
+                                         params.rxntype,
                                          params.min_aa_length)
             with tarfile.open(output_tar) as outTar:
                 outTar.extractall(tmpOutputFolder)
-            out_file = glob.glob(tmpOutputFolder+'/*.rpsbml.xml')
+            out_file = glob.glob(tmpOutputFolder+'/*.xml')
             if len(out_file)>1:
-                logging.warning('There are more than one output file...')
+                logging.error('There are more than one output file...')
+                exit(1)
             shutil.copy(out_file[0], params.output)
     else:
         logging.error('Cannot identify the input/output format: '+str(params.input_format))
+        exit(1)
