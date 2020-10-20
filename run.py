@@ -44,18 +44,18 @@ def main(inputfile,
     :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
     :param min_aa_length: Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)
 
-    :param inputTar: str
-    :param outputTar: str
-    :param input_format: str
-    :param pathway_id: str
-    :param num_results: int
-    :param taxonomy_format: str
-    :param taxonomy_input: str
-    :param direction: int
-    :param noMSA: bool
-    :param fp: str
-    :param rxntype: str 
-    :param min_aa_length: int
+    :type inputTar: str
+    :type outputTar: str
+    :type input_format: str
+    :type pathway_id: str
+    :type num_results: int
+    :type taxonomy_format: str
+    :type taxonomy_input: str
+    :type direction: int
+    :type noMSA: bool
+    :type fp: str
+    :type rxntype: str 
+    :type min_aa_length: int
 
     :rtype: None
     :return: None

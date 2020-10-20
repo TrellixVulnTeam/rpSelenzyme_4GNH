@@ -53,13 +53,13 @@ def singleReactionRule(reaction_rule,
     :param fp: Fingerprint for reactants for quickRSiml (Default: RDK)
     :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
 
-    :param reaction_rule: str
-    :param host_taxonomy_id: int
-    :param num_results: int
-    :param direction: int
-    :param noMSA: bool
-    :param fp: str
-    :param rxntype: str 
+    :type reaction_rule: str
+    :type host_taxonomy_id: int
+    :type num_results: int
+    :type direction: int
+    :type noMSA: bool
+    :type fp: str
+    :type rxntype: str 
 
     :rtype: dict
     :return: The UNIPROT id's and its associated score
@@ -99,15 +99,15 @@ def singleSBML(rpsbml,
     :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
     :param min_aa_length: Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)
 
-    :param rpsbml: rpSBML object
-    :param host_taxonomy_id: int
-    :param pathway_id: str
-    :param num_results: int
-    :param direction: int
-    :param noMSA: bool
-    :param fp: str
-    :param rxntype: str 
-    :param min_aa_length: int
+    :type rpsbml: rpSBML object
+    :type host_taxonomy_id: int
+    :type pathway_id: str
+    :type num_results: int
+    :type direction: int
+    :type noMSA: bool
+    :type fp: str
+    :type rxntype: str 
+    :type min_aa_length: int
 
     :rtype: bool
     :return: The success or failure of the function

@@ -46,16 +46,16 @@ def runSelenzyme_mem(inputTar,
     :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
     :param min_aa_length: Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)
 
-    :param inputTar: str
-    :param outputTar: str
-    :param reaction_smile: str
-    :param host_taxonomy_id: int
-    :param num_results: int
-    :param direction: int
-    :param noMSA: bool
-    :param fp: str
-    :param rxntype: str 
-    :param min_aa_length: int
+    :type inputTar: str
+    :type outputTar: str
+    :type reaction_smile: str
+    :type host_taxonomy_id: int
+    :type num_results: int
+    :type direction: int
+    :type noMSA: bool
+    :type fp: str
+    :type rxntype: str 
+    :type min_aa_length: int
 
     :rtype: bool
     :return: The success or failure of the function
@@ -97,16 +97,16 @@ def runSelenzyme_hdd(inputTar,
     :param rxntype: The type of reaction rule. Valid options: smarts, smiles. (Default: smarts)
     :param min_aa_length: Filter the UNIRPOT proteins and return only whose amino acid lengths are greater than the input value. (Default: 100)
 
-    :param inputTar: str
-    :param outputTar: str
-    :param reaction_smile: str
-    :param host_taxonomy_id: int
-    :param num_results: int
-    :param direction: int
-    :param noMSA: bool
-    :param fp: str
-    :param rxntype: str 
-    :param min_aa_length: int
+    :type inputTar: str
+    :type outputTar: str
+    :type reaction_smile: str
+    :type host_taxonomy_id: int
+    :type num_results: int
+    :type direction: int
+    :type noMSA: bool
+    :type fp: str
+    :type rxntype: str 
+    :type min_aa_length: int
 
     :rtype: bool
     :return: The success or failure of the function
