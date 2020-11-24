@@ -1,4 +1,4 @@
-FROM brsynth/rpbase:v2
+FROM brsynth/rpbase
 
 RUN apt-get install -y libxrender1 libsm6 libxext6
 
